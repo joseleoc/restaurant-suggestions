@@ -1,12 +1,13 @@
-import { Text } from "react-native-paper";
 import { Image } from "expo-image";
-import { StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useTheme } from "react-native-paper";
 import { View } from "react-native";
-import { FontStyles } from "@/constants/Styles";
+import { router } from "expo-router";
+import { Text } from "react-native-paper";
+import { StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
-import { Link, router } from "expo-router";
+import { useTheme } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import { FontStyles } from "@/constants/Styles";
 
 export default function Welcome() {
   const { colors } = useTheme();
@@ -39,7 +40,11 @@ export default function Welcome() {
             <Text
               key={ind}
               variant="displayLarge"
-              style={[{ color: colors.onPrimary }, FontStyles.headline]}
+              style={[
+                { color: colors.onPrimary },
+                FontStyles.headline,
+                styles.title,
+              ]}
             >
               {str}
             </Text>
@@ -58,7 +63,7 @@ export default function Welcome() {
             ]}
             labelStyle={[styles.button_text]}
           >
-            Crear cuenta
+            Iniciar sesión
           </Button>
           <Button
             onPress={() => handleNavigate("sign-up")}
@@ -86,7 +91,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 64,
     alignContent: "space-between",
     justifyContent: "center",
-    gap: 32,
+    gap: 48,
   },
   branding_container: {
     flexDirection: "row",
@@ -105,6 +110,9 @@ const styles = StyleSheet.create({
   title_container: {
     gap: 8,
   },
+  title: {
+    fontWeight: "bold",
+  },
   actions_container: {
     gap: 16,
     width: "100%",
@@ -114,7 +122,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   button: {
-    height: 48,
+    height: 64,
     borderRadius: 50,
     width: "100%",
   },
