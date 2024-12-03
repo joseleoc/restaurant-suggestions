@@ -73,7 +73,7 @@ export default function RootLayout() {
         <GestureHandlerRootView>
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(auth)" />
-            {user && <Stack.Screen name="home" />}
+            <Stack.Screen name="home" />
             <Stack.Screen name="+not-found" />
           </Stack>
           <StatusBar style="auto" />
