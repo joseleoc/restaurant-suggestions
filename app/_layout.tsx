@@ -1,5 +1,5 @@
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
@@ -11,7 +11,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Toasts } from '@backpackapp-io/react-native-toast';
 import { useStore } from '@/stores';
 import { auth } from '@/firebase';
-import { router } from 'expo-router';
+import { getUser } from '@/services/auth/auth';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -39,14 +39,20 @@ export default function RootLayout() {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
-      if (firebaseUser != null) {
-        setUser(firebaseUser);
-        router.replace('/home');
+      if (firebaseUser != null && !!firebaseUser.uid) {
+        getUser({ userId: firebaseUser.uid })
+          .then((user) => {
+            setUser(user);
+            router.replace('/home');
+          })
+          .catch((error) => {
+            console.error('🚀 ~ file: _layout.tsx:48 ~ getUser ~ error:', error);
+            resetUser();
+          });
       } else {
-        resetUser();
         router.replace('/(auth)');
+        resetUser();
       }
-      console.log({ user });
     });
 
     // Clean up the subscription on unmount

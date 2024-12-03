@@ -13,6 +13,8 @@ import { auth } from '@/firebase';
 import { styles } from './sign-up-form.styles';
 import { signUpSchema } from './sign-up-form.schema';
 import { FirebaseError } from 'firebase/app';
+import { createUser } from '@/services/auth/auth';
+import { FirebaseErrorCodes } from '@/constants/firebase-error-codes';
 
 export default function SignUpForm() {
   // --- Hooks -----------------------------------------------------------------
@@ -38,22 +40,17 @@ export default function SignUpForm() {
       const { email, password } = data;
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        console.log({ userCredential });
+        await createUser({ user: userCredential.user });
         toast.success('Registro exitoso');
         setIsLoading(false);
       } catch (error: any) {
-        console.error('🚀 ~ file: sign-up-form.tsx:32 ~ onSubmit ~ error:', error);
+        console.error('🚀 ~ file: sign-up-form.tsx:36 ~ onSubmit ~ error:', {
+          code: error.code,
+          error,
+        });
         if (error instanceof FirebaseError) {
-          const firebaseErrorCodes = {
-            'auth/email-already-in-use': 'Ya existe un usuario con ese email',
-            'auth/invalid-email': 'Email inválido',
-            'auth/operation-not-allowed': 'No tienes permisos para hacer eso',
-            'auth/weak-password': 'Contraseña demasiado débil',
-            'auth/user-disabled': 'Usuario deshabilitado',
-            'auth/network-request-failed': 'Error de red',
-          };
-          if (error.code in firebaseErrorCodes) {
-            toast.error(firebaseErrorCodes[error.code as keyof typeof firebaseErrorCodes]);
+          if (error.code in FirebaseErrorCodes) {
+            toast.error(FirebaseErrorCodes[error.code as keyof typeof FirebaseErrorCodes]);
           } else {
             toast.error('Error al registrar');
           }
