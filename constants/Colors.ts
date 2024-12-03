@@ -7,10 +7,15 @@ export const theme = {
   // Specify custom property in nested object
   colors: {
     ...DefaultTheme.colors,
-    primary: "#fcba39",
-    onPrimary: "#fff",
-    headlineShadow: "rgba(255, 87, 87, 0.4)",
     secondary: "#ff5757",
     onSecondary: "#fff",
+    background: "#fcba39",
+    onBackground: "#fff",
+    headlineShadow: "rgba(255, 87, 87, 0.4)",
+    light: "#fcba39",
+    onLight: "#fff",
+    surface: '#fff',
+    surfaceVariant: '#fff',
+    onSurface: '#000',
   },
 };
