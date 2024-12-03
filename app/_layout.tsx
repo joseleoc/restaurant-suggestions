@@ -6,20 +6,56 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { PaperProvider } from 'react-native-paper';
 import { theme } from '../constants/Colors';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Toasts } from '@backpackapp-io/react-native-toast';
+import { useStore } from '@/stores';
+import { auth } from '@/firebase';
+import { router } from 'expo-router';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  // --- Hooks -----------------------------------------------------------------
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
+  const { user, setUser, resetUser } = useStore();
+  // --- END: Hooks ------------------------------------------------------------
 
+  // -- Local State -------------------------------------------------------------
+  // -- END: Local State --------------------------------------------------------
+
+  // --- Data and Handlers ------------------------------------------------------
+  // -- END: Data and Handlers --------------------------------------------------
+
+  // --- Effects ----------------------------------------------------------------
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+      if (firebaseUser != null) {
+        setUser(firebaseUser);
+        router.replace('/home');
+      } else {
+        resetUser();
+        router.replace('/(auth)');
+      }
+      console.log({ user });
+    });
+
+    // Clean up the subscription on unmount
+    return () => {
+      resetUser();
+      unsubscribe();
+    };
+  }, []);
+  // --- END: Effects -----------------------------------------------------------
 
   if (!loaded) {
     return null;
@@ -27,11 +63,17 @@ export default function RootLayout() {
 
   return (
     <PaperProvider theme={theme}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
+      <SafeAreaProvider>
+        <GestureHandlerRootView>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(auth)" />
+            {user && <Stack.Screen name="home" />}
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="auto" />
+          <Toasts />
+        </GestureHandlerRootView>
+      </SafeAreaProvider>
     </PaperProvider>
   );
 }

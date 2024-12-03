@@ -1,8 +1,9 @@
 import * as yup from 'yup';
 import { useState } from 'react';
-import { TextInput } from 'react-native-paper';
+import { ActivityIndicator, TextInput } from 'react-native-paper';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { toast } from '@backpackapp-io/react-native-toast';
 import { Button, Text, useTheme } from 'react-native-paper';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
@@ -11,8 +12,10 @@ import { auth } from '@/firebase';
 
 import { styles } from './sign-up-form.styles';
 import { signUpSchema } from './sign-up-form.schema';
+import { FirebaseError } from 'firebase/app';
 
 export default function SignUpForm() {
+  // --- Hooks -----------------------------------------------------------------
   const { colors } = useTheme();
   const {
     handleSubmit,
@@ -21,21 +24,45 @@ export default function SignUpForm() {
   } = useForm({
     resolver: yupResolver(signUpSchema),
   });
+  // --- END: Hooks ------------------------------------------------------------
 
+  // --- Local State ------------------------------------------------------------
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  // --- END: Local State -------------------------------------------------------
+
+  // --- Data and Handlers -----------------------------------------------------
   const onSubmit = async (data: yup.Asserts<typeof signUpSchema>) => {
-    console.log({ isValid });
     if (isValid) {
+      setIsLoading(true);
       const { email, password } = data;
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         console.log({ userCredential });
-      } catch (error) {
+        toast.success('Registro exitoso');
+        setIsLoading(false);
+      } catch (error: any) {
         console.error('🚀 ~ file: sign-up-form.tsx:32 ~ onSubmit ~ error:', error);
+        if (error instanceof FirebaseError) {
+          const firebaseErrorCodes = {
+            'auth/email-already-in-use': 'Ya existe un usuario con ese email',
+            'auth/invalid-email': 'Email inválido',
+            'auth/operation-not-allowed': 'No tienes permisos para hacer eso',
+            'auth/weak-password': 'Contraseña demasiado débil',
+            'auth/user-disabled': 'Usuario deshabilitado',
+            'auth/network-request-failed': 'Error de red',
+          };
+          if (error.code in firebaseErrorCodes) {
+            toast.error(firebaseErrorCodes[error.code as keyof typeof firebaseErrorCodes]);
+          } else {
+            toast.error('Error al registrar');
+          }
+        }
+        setIsLoading(false);
       }
     }
   };
-
-  const [showPassword, setShowPassword] = useState(false);
+  // --- END: Data and Handlers ------------------------------------------------
 
   return (
     <KeyboardAvoidingView
@@ -140,8 +167,13 @@ export default function SignUpForm() {
               </Text>
             )}
           </View>
-          <Button mode="contained" onPress={handleSubmit(onSubmit)} style={styles.button}>
-            <Text>Registrarme</Text>
+          <Button
+            disabled={isLoading}
+            mode="contained"
+            onPress={handleSubmit(onSubmit)}
+            style={styles.button}
+          >
+            {isLoading ? <ActivityIndicator color={colors.onPrimary} /> : <Text>Registrarme</Text>}
           </Button>
         </View>
       </ScrollView>
