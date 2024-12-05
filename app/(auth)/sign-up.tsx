@@ -2,8 +2,8 @@ import { Text, useTheme } from 'react-native-paper';
 import { ImageBackground, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import SignUpForm from '@/components/sign-up-form/sign-up-form';
 import { FontStyles } from '@/constants/Styles';
+import SignUpForm from '@/components/sign-up-form/sign-up-form';
 
 export default function SignUp() {
   const { colors } = useTheme();
