@@ -39,8 +39,7 @@ export default function SignUpForm() {
       setIsLoading(true);
       const { email, password } = data;
       try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        await createUser({ user: userCredential.user });
+        await createUser({ email, password });
         toast.success('Registro exitoso');
         setIsLoading(false);
       } catch (error: any) {
