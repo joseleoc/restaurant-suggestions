@@ -48,8 +48,29 @@ export default function SignInForm() {
       setIsLoading(true);
       const { email, password } = data;
       try {
-        const user = await signIn({ email, password });
-        setUser(user);
+        try {
+          const user = await signIn({ email, password });
+          setUser(user);
+        } catch (error) {
+          if (error instanceof FirebaseError) {
+            console.error(
+              '🚀 ~ file: sign-in-form.tsx:56 ~ onSubmit ~ error:',
+              error,
+            );
+            if (error.code in FirebaseErrorCodes) {
+              toast.error(
+                FirebaseErrorCodes[
+                  error.code as keyof typeof FirebaseErrorCodes
+                ],
+              );
+            } else {
+              toast.error('Error al registrar');
+            }
+
+            setIsLoading(false);
+            return;
+          }
+        }
         toast.success('Login exitoso');
         setIsLoading(false);
       } catch (error: any) {

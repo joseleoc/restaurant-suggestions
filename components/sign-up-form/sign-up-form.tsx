@@ -48,6 +48,7 @@ export default function SignUpForm() {
           error,
         });
         if (error instanceof FirebaseError) {
+          console.log('entro al error', { error });
           if (error.code in FirebaseErrorCodes) {
             toast.error(
               FirebaseErrorCodes[error.code as keyof typeof FirebaseErrorCodes],

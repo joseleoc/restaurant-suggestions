@@ -60,7 +60,10 @@ export const getUser = async (params: { userId: string }) => {
   });
 };
 
-export const signIn = async (params: { email: string; password: string }): Promise<User> => {
+export const signIn = async (params: {
+    email: string;
+    password: string;
+}): Promise<User> => {
     return new Promise(async (resolve, reject) => {
         try {
             const { email, password } = params;
@@ -69,24 +72,31 @@ export const signIn = async (params: { email: string; password: string }): Promi
                 email,
                 password,
             );
-            const user = (
-                await getDoc(doc(db, 'users', userCredential.user.uid))
-            ).data();
-            if (user == undefined) {
-                reject(new Error('No existe el usuario'));
-            } else if (user?.is_deleted) {
-                reject(new Error('El usuario ha sido eliminado'));
-                return;
-            } else if (user?.is_active === false) {
-                reject(new Error('El usuario no está activo'));
-                return;
-            } else {
-                resolve(new User(user.data()));
-            }
-        } catch (error) {
-            console.error("🚀 ~ file: auth.ts:87 ~ returnnewPromise ~ error:", error);
-            reject(error);
-        }
-
-    });
+            try {
+                const user = (
+                    await getDoc(doc(db, 'users', userCredential.user.uid))
+                ).data();
+                if (user == undefined) {
+                    reject(new Error('No existe el usuario'));
+                } else if (user?.is_deleted) {
+                    reject(new Error('El usuario ha sido eliminado'));
+                    return;
+                } else if (user?.is_active === false) {
+                    reject(new Error('El usuario no está activo'));
+                    return;
+                } else {
+                    resolve(new User(user));
+                }
+      } catch (error) {
+          console.error(
+              '🚀 ~ file: auth.ts:91 ~ returnnewPromise ~ error:',
+              error,
+          );
+          reject(error);
+      }
+    } catch (error) {
+        console.error('🚀 ~ file: auth.ts:87 ~ returnnewPromise ~ error:', error);
+        reject(error);
+    }
+  });
 };
