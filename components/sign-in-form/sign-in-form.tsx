@@ -1,20 +1,29 @@
 import * as yup from 'yup';
-import { useState } from 'react';
-import { ActivityIndicator, TextInput } from 'react-native-paper';
-import { useForm, Controller } from 'react-hook-form';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  View,
+  Text,
+} from 'react-native';
+import { styles } from './sign-in-form.styles';
+import { Controller, useForm } from 'react-hook-form';
+import {
+  ActivityIndicator,
+  Button,
+  TextInput,
+  useTheme,
+} from 'react-native-paper';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { SignInSchema } from './sign-up-form.schema';
+import { useState } from 'react';
 import { toast } from '@backpackapp-io/react-native-toast';
-import { Button, Text, useTheme } from 'react-native-paper';
-import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
-
-import { styles } from './sign-up-form.styles';
-import { signUpSchema } from './sign-up-form.schema';
+import { signIn } from '@/services/auth/auth';
 import { FirebaseError } from 'firebase/app';
-import { createUser } from '@/services/auth/auth';
 import { FirebaseErrorCodes } from '@/constants/firebase-error-codes';
 import { useStore } from '@/stores';
 
-export default function SignUpForm() {
+export default function SignInForm() {
   // --- Hooks -----------------------------------------------------------------
   const { colors } = useTheme();
   const {
@@ -22,8 +31,9 @@ export default function SignUpForm() {
     control,
     formState: { errors, isValid },
   } = useForm({
-    resolver: yupResolver(signUpSchema),
+    resolver: yupResolver(SignInSchema),
   });
+
   const { setUser } = useStore();
   // --- END: Hooks ------------------------------------------------------------
 
@@ -33,17 +43,17 @@ export default function SignUpForm() {
   // --- END: Local State -------------------------------------------------------
 
   // --- Data and Handlers -----------------------------------------------------
-  const onSubmit = async (data: yup.Asserts<typeof signUpSchema>) => {
+  const onSubmit = async (data: yup.Asserts<typeof SignInSchema>) => {
     if (isValid && isLoading === false) {
       setIsLoading(true);
       const { email, password } = data;
       try {
-        const user = await createUser({ email, password });
+        const user = await signIn({ email, password });
         setUser(user);
-        toast.success('Registro exitoso');
+        toast.success('Login exitoso');
         setIsLoading(false);
       } catch (error: any) {
-        console.error('🚀 ~ file: sign-up-form.tsx:36 ~ onSubmit ~ error:', {
+        console.error('🚀 ~ file: sign-in-form.tsx:36 ~ onSubmit ~ error:', {
           code: error.code,
           error,
         });
@@ -55,6 +65,8 @@ export default function SignUpForm() {
           } else {
             toast.error('Error al registrar');
           }
+        } else {
+          toast.error('Error al registrar');
         }
         setIsLoading(false);
       }
@@ -132,39 +144,6 @@ export default function SignUpForm() {
             )}
           </View>
 
-          <View style={styles.inputContainer}>
-            <Controller
-              name="confirmPassword"
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label="Confirmar contraseña"
-                  secureTextEntry={!showPassword}
-                  right={
-                    <TextInput.Icon
-                      icon={showPassword ? 'eye-off' : 'eye'}
-                      onPress={() => setShowPassword(!showPassword)}
-                    />
-                  }
-                  style={styles.input}
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                />
-              )}
-            />
-            {errors.confirmPassword?.message?.toString() && (
-              <Text
-                style={[
-                  styles.errorMessage,
-                  { color: colors.error, backgroundColor: colors.onBackground },
-                ]}
-              >
-                {errors.confirmPassword?.message?.toString()}
-              </Text>
-            )}
-          </View>
           <Button
             disabled={isLoading}
             mode="contained"

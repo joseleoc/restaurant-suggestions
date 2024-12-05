@@ -1,20 +1,24 @@
 import { ImageBackground, View } from 'react-native';
-import { Text } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import SignInForm from '@/components/sign-in-form/sign-in-form';
+import BackButton from '@/components/back-button/back-button';
 
 export default function SignInScreen() {
   return (
     <SafeAreaView>
-      <ImageBackground source={require('../../assets/images/backgrounds/tasty-bg.jpg')}>
+      <ImageBackground
+        source={require('../../assets/images/backgrounds/tasty-bg.jpg')}
+      >
         <LinearGradient
           colors={['transparent', 'rgba(0, 0, 0, 0.7)']}
           style={styles.gradient_mask}
         />
         <View style={styles.section}>
-          <Text>Iniciar sesión</Text>
+          <SignInForm />
         </View>
+        <BackButton />
       </ImageBackground>
     </SafeAreaView>
   );

@@ -10,4 +10,5 @@ export const FirebaseErrorCodes = {
     'auth/too-many-requests': 'Demasiados intentos fallidos',
     'auth/app-deleted': 'La aplicación ha sido eliminada',
     'permission-denied': 'Permiso denegado',
+    'auth/invalid-credential': 'Credenciales inválidas',
 };

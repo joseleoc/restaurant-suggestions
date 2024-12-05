@@ -4,12 +4,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontStyles } from '@/constants/Styles';
 import SignUpForm from '@/components/sign-up-form/sign-up-form';
+import BackButton from '@/components/back-button/back-button';
 
 export default function SignUp() {
   const { colors } = useTheme();
   return (
     <SafeAreaView>
-      <ImageBackground source={require('../../assets/images/backgrounds/tasty-bg.jpg')}>
+      <ImageBackground
+        source={require('../../assets/images/backgrounds/tasty-bg.jpg')}
+      >
         <LinearGradient
           colors={['transparent', 'rgba(0, 0, 0, 0.7)']}
           style={styles.gradient_mask}
@@ -20,7 +23,11 @@ export default function SignUp() {
               <Text
                 key={ind}
                 variant="headlineLarge"
-                style={[{ color: colors.onPrimary }, FontStyles.headline, styles.title]}
+                style={[
+                  { color: colors.onPrimary },
+                  FontStyles.headline,
+                  styles.title,
+                ]}
               >
                 {str}
               </Text>
@@ -28,6 +35,7 @@ export default function SignUp() {
           </View>
           <SignUpForm />
         </View>
+        <BackButton />
       </ImageBackground>
     </SafeAreaView>
   );
