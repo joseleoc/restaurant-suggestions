@@ -9,7 +9,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "build": "eas build --platform android --profile production"
   },
   "jest": {
     "preset": "jest-expo"
@@ -48,7 +49,8 @@
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.2",
     "yup": "^1.4.0",
-    "zustand": "^5.0.1"
+    "zustand": "^5.0.1",
+    "expo-dev-client": "~5.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
