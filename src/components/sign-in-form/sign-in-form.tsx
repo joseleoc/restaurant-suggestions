@@ -1,19 +1,8 @@
 import * as yup from "yup";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  View,
-  Text,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import { styles } from "./sign-in-form.styles";
-import { Controller, useForm } from "react-hook-form";
-import {
-  ActivityIndicator,
-  Button,
-  TextInput,
-  useTheme,
-} from "react-native-paper";
+import { useForm } from "react-hook-form";
+import { ActivityIndicator, Button, useTheme } from "react-native-paper";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SignInSchema } from "./sign-in-form.schema";
 import { useState } from "react";
@@ -22,6 +11,7 @@ import { signIn } from "@/src/auth/auth";
 import { FirebaseError } from "firebase/app";
 import { FirebaseErrorCodes } from "@/constants/firebase-error-codes";
 import { useStore } from "../../stores/stores";
+import InputController from "../input-controller/Input-controller";
 
 export default function SignInForm() {
   // --- Hooks -----------------------------------------------------------------
@@ -102,68 +92,32 @@ export default function SignInForm() {
     >
       <ScrollView>
         <View style={styles.formContainer}>
-          <View style={styles.inputContainer}>
-            <Controller
-              name="email"
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  keyboardType="email-address"
-                  label="Email"
-                  style={styles.input}
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  error={!!errors.email?.message?.toString()}
-                />
-              )}
-            />
-            {errors.email?.message?.toString() && (
-              <Text
-                style={[
-                  styles.errorMessage,
-                  { color: colors.error, backgroundColor: colors.onBackground },
-                ]}
-              >
-                {errors.email?.message?.toString()}
-              </Text>
-            )}
-          </View>
+          <InputController
+            containerStyle={styles.inputContainer}
+            name="email"
+            control={control}
+            rules={{ required: true }}
+            keyboardType="email-address"
+            label="Email"
+            hasError={!!errors.email?.message?.toString()}
+            errorMessage={errors.email?.message?.toString()}
+            inputStyle={styles.input}
+          />
 
-          <View style={styles.inputContainer}>
-            <Controller
-              name="password"
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label="Contraseña"
-                  secureTextEntry={!showPassword}
-                  right={
-                    <TextInput.Icon
-                      icon={showPassword ? "eye-off" : "eye"}
-                      onPress={() => setShowPassword(!showPassword)}
-                    />
-                  }
-                  style={styles.input}
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                />
-              )}
-            />
-            {errors.password?.message?.toString() && (
-              <Text
-                style={[
-                  styles.errorMessage,
-                  { color: colors.error, backgroundColor: colors.onBackground },
-                ]}
-              >
-                {errors.password?.message?.toString()}
-              </Text>
-            )}
-          </View>
+          <InputController
+            containerStyle={styles.inputContainer}
+            name="password"
+            control={control}
+            rules={{ required: true }}
+            keyboardType="email-address"
+            label="Contraseña"
+            hasError={!!errors.password?.message?.toString()}
+            errorMessage={errors.password?.message?.toString()}
+            icon={showPassword ? "eye-off" : "eye"}
+            onPressIcon={() => setShowPassword(!showPassword)}
+            inputStyle={styles.input}
+            secureTextEntry={!showPassword}
+          />
 
           <Button
             disabled={isLoading}

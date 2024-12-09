@@ -3,37 +3,51 @@ import { useStore } from "@/stores/stores";
 import { useEffect } from "react";
 import { styles } from "./complete-profile-modal.styles";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View } from "react-native";
+import { View, KeyboardAvoidingView, Platform } from "react-native";
+import { useForm } from "react-hook-form";
 
 export default function CompleteProfile() {
   // --- Hooks -----------------------------------------------------------------
-  const { completeProfileModalIsOpen } = useStore();
   const { colors } = useTheme();
+  const { completeProfileModalIsOpen, setUser } = useStore();
+  const {
+    handleSubmit,
+    control,
+    formState: { errors, isValid },
+  } = useForm({});
+
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Local State ------------------------------------------------------------
   // -- END: Local State --------------------------------------------------------
 
   // --- Data and Handlers ------------------------------------------------------
-  useEffect(() => {}, [completeProfileModalIsOpen]);
+
+  const onsubmit = async (data: any) => {};
   // -- END: Data and Handlers --------------------------------------------------
 
   // --- Effects ----------------------------------------------------------------
+  useEffect(() => {}, [completeProfileModalIsOpen]);
   // -- END: Effects ------------------------------------------------------------
 
   return (
     <Modal
       visible={completeProfileModalIsOpen}
-      dismissable={true}
+      dismissable={false}
       style={styles.container}
     >
       <SafeAreaView>
-        <View
-          style={[styles.formContainer, { backgroundColor: colors.surface }]}
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={40}
         >
-          <TextInput placeholder="Nombre" mode="outlined" />
-          <Text>CompleteProfile</Text>
-        </View>
+          <View
+            style={[styles.formContainer, { backgroundColor: colors.surface }]}
+          >
+            <TextInput placeholder="Nombre" mode="outlined" />
+            <Text>CompleteProfile</Text>
+          </View>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </Modal>
   );

@@ -13,7 +13,7 @@ import { auth } from "@/firebase";
 import { getUser } from "@/src/auth/auth";
 import { theme } from "@/src/constants/Colors";
 import { useStore } from "@/src/stores/stores";
-import CompleteProfile from "@/src/components/complete-profile-modal/complete-profile-modal";
+import CompleteProfile from "@/src/modals/complete-profile-modal/complete-profile-modal";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
