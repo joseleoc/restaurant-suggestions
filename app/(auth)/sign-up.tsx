@@ -19,7 +19,7 @@ export default function SignUp() {
           style={styles.gradient_mask}
         />
         <View style={styles.section}>
-          <View>
+          <View style={styles.titleContainer}>
             {["Únetenos", ":-)"].map((str, ind) => (
               <Text
                 key={ind}
@@ -46,10 +46,12 @@ const styles = StyleSheet.create({
   section: {
     width: "100%",
     height: "100%",
-    paddingHorizontal: 64,
     alignContent: "space-around",
     justifyContent: "center",
     gap: 32,
+  },
+  titleContainer: {
+    paddingHorizontal: 64,
   },
   gradient_mask: {
     position: "absolute",

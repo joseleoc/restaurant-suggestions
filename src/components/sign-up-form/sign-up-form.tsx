@@ -171,13 +171,22 @@ export default function SignUpForm() {
             disabled={isLoading}
             mode="contained"
             onPress={handleSubmit(onSubmit)}
-            buttonColor={colors.tertiary}
-            style={styles.button}
+            buttonColor={colors.secondary}
+            style={[
+              styles.button,
+              styles.buttonContainer,
+              { backgroundColor: colors.secondary },
+            ]}
+            contentStyle={[
+              styles.button,
+              { backgroundColor: colors.secondary },
+            ]}
+            labelStyle={[styles.button_text, { color: colors.onSecondary }]}
           >
             {isLoading ? (
               <ActivityIndicator color={colors.onPrimary} />
             ) : (
-              <Text>Registrarme</Text>
+              <>Registrarme</>
             )}
           </Button>
         </View>

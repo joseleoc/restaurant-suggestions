@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
   section: {
     width: "100%",
     height: "100%",
-    paddingHorizontal: 64,
     alignContent: "space-between",
     justifyContent: "center",
     gap: 32,

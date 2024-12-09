@@ -15,14 +15,13 @@ import {
   useTheme,
 } from "react-native-paper";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { SignInSchema } from "./sign-up-form.schema";
+import { SignInSchema } from "./sign-in-form.schema";
 import { useState } from "react";
 import { toast } from "@backpackapp-io/react-native-toast";
 import { signIn } from "@/src/auth/auth";
 import { FirebaseError } from "firebase/app";
 import { FirebaseErrorCodes } from "@/constants/firebase-error-codes";
 import { useStore } from "../../stores/stores";
-
 
 export default function SignInForm() {
   // --- Hooks -----------------------------------------------------------------
@@ -170,12 +169,21 @@ export default function SignInForm() {
             disabled={isLoading}
             mode="contained"
             onPress={handleSubmit(onSubmit)}
-            style={styles.button}
+            style={[
+              styles.buttonContainer,
+              styles.button,
+              { backgroundColor: colors.secondary },
+            ]}
+            contentStyle={[
+              styles.button,
+              { backgroundColor: colors.secondary },
+            ]}
+            labelStyle={[styles.button_text, { color: colors.onSecondary }]}
           >
             {isLoading ? (
-              <ActivityIndicator color={colors.onPrimary} />
+              <ActivityIndicator color={colors.onSecondary} />
             ) : (
-              <Text>Registrarme</Text>
+              <> Iniciar Sesión</>
             )}
           </Button>
         </View>
