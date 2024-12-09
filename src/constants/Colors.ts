@@ -14,8 +14,10 @@ export const theme = {
     headlineShadow: "rgba(255, 87, 87, 0.4)",
     light: "#fcba39",
     onLight: "#fff",
-    surface: '#fff',
-    surfaceVariant: '#fff',
-    onSurface: '#000',
+    surface: "#fff",
+    surfaceVariant: "#fff",
+    onSurface: "#000",
+
+    dark: {},
   },
 };

@@ -1,18 +1,18 @@
-import * as yup from 'yup';
-import { useState } from 'react';
-import { ActivityIndicator, TextInput } from 'react-native-paper';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { toast } from '@backpackapp-io/react-native-toast';
-import { Button, Text, useTheme } from 'react-native-paper';
-import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import * as yup from "yup";
+import { useState } from "react";
+import { ActivityIndicator, TextInput } from "react-native-paper";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "@backpackapp-io/react-native-toast";
+import { Button, Text, useTheme } from "react-native-paper";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
-import { styles } from './sign-up-form.styles';
-import { signUpSchema } from './sign-up-form.schema';
-import { FirebaseError } from 'firebase/app';
-import { createUser } from '@/src/auth/auth';
-import { FirebaseErrorCodes } from '@/constants/firebase-error-codes';
-import { useStore } from '@/stores';
+import { styles } from "./sign-up-form.styles";
+import { signUpSchema } from "./sign-up-form.schema";
+import { FirebaseError } from "firebase/app";
+import { createUser } from "@/src/auth/auth";
+import { FirebaseErrorCodes } from "@/constants/firebase-error-codes";
+import { useStore } from "@/stores";
 
 export default function SignUpForm() {
   // --- Hooks -----------------------------------------------------------------
@@ -40,11 +40,11 @@ export default function SignUpForm() {
       try {
         const user = await createUser({ email, password });
         setUser(user);
-        toast.success('Registro exitoso');
+        toast.success("Registro exitoso");
         setIsLoading(false);
       } catch (error: any) {
         setIsLoading(false);
-        console.error('🚀 ~ file: sign-up-form.tsx:36 ~ onSubmit ~ error:', {
+        console.error("🚀 ~ file: sign-up-form.tsx:36 ~ onSubmit ~ error:", {
           code: error.code,
           error,
         });
@@ -54,10 +54,10 @@ export default function SignUpForm() {
               FirebaseErrorCodes[error.code as keyof typeof FirebaseErrorCodes],
             );
           } else {
-            toast.error('Error al registrar');
+            toast.error("Error al registrar");
           }
         } else {
-          toast.error('Error al registrar');
+          toast.error("Error al registrar");
         }
       }
     }
@@ -66,7 +66,7 @@ export default function SignUpForm() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={40}
     >
       <ScrollView>
@@ -111,7 +111,7 @@ export default function SignUpForm() {
                   secureTextEntry={!showPassword}
                   right={
                     <TextInput.Icon
-                      icon={showPassword ? 'eye-off' : 'eye'}
+                      icon={showPassword ? "eye-off" : "eye"}
                       onPress={() => setShowPassword(!showPassword)}
                     />
                   }
@@ -145,7 +145,7 @@ export default function SignUpForm() {
                   secureTextEntry={!showPassword}
                   right={
                     <TextInput.Icon
-                      icon={showPassword ? 'eye-off' : 'eye'}
+                      icon={showPassword ? "eye-off" : "eye"}
                       onPress={() => setShowPassword(!showPassword)}
                     />
                   }

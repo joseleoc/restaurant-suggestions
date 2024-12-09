@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   formContainer: {
@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   input: {},
   errorMessage: {
     height: 20,
-    fontWeight: 'semibold',
+    fontWeight: "semibold",
     paddingHorizontal: 8,
   },
 });

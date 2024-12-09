@@ -1,17 +1,10 @@
-import { Button, Text } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { auth } from '@/firebase';
+import HomePage from "@/src/pages/home.page";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Home() {
-  const handleLogout = async () => {
-    await auth.signOut();
-  };
   return (
     <SafeAreaView>
-      <Text>Home</Text>
-      <Button onPress={() => handleLogout()} mode="contained-tonal" buttonColor="#3f9">
-        logout
-      </Button>
+      <HomePage />
     </SafeAreaView>
   );
 }
