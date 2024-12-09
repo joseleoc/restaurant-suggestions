@@ -14,12 +14,11 @@ export default function Home() {
   // -- END: Local State --------------------------------------------------------
 
   // --- Data and Handlers ------------------------------------------------------
-  // TODO - descomentar para mostrar modal de completar perfil
-  // useEffect(() => {
-  //   if (user != null && !user.profile_completed && pathName === "/home") {
-  //     setCompleteProfileModal(true);
-  //   }
-  // }, [user, setCompleteProfileModal, pathName]);
+  useEffect(() => {
+    if (user != null && !user.profile_completed && pathName === "/home") {
+      setCompleteProfileModal(true);
+    }
+  }, [user, setCompleteProfileModal, pathName]);
   // -- END: Data and Handlers --------------------------------------------------
 
   // --- Effects ----------------------------------------------------------------

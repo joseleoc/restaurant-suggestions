@@ -1,13 +1,27 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+  title: {
+    position: "absolute",
+    top: -100,
+    left: 0,
+    right: 0,
+    marginTop: 40,
+    fontWeight: "bold",
+  },
   container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
+    padding: 40,
   },
   formContainer: {
-    padding: 32,
+    borderRadius: 15,
+    paddingHorizontal: 32,
+    paddingVertical: 40,
+    gap: 16,
+    alignContent: "center",
+    justifyContent: "center",
+  },
+  nextButton: {
+    alignSelf: "center",
+    borderRadius: 5,
   },
 });

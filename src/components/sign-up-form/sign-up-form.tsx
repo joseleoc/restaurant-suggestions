@@ -73,7 +73,6 @@ export default function SignUpForm() {
       <ScrollView>
         <View style={styles.formContainer}>
           <InputController
-            containerStyle={styles.inputContainer}
             name="email"
             control={control}
             rules={{ required: true }}
@@ -81,11 +80,9 @@ export default function SignUpForm() {
             label="Email"
             hasError={!!errors.email?.message?.toString()}
             errorMessage={errors.email?.message?.toString()}
-            inputStyle={styles.input}
           />
 
           <InputController
-            containerStyle={styles.inputContainer}
             name="password"
             control={control}
             rules={{ required: true }}
@@ -95,12 +92,10 @@ export default function SignUpForm() {
             errorMessage={errors.password?.message?.toString()}
             icon={showPassword ? "eye-off" : "eye"}
             onPressIcon={() => setShowPassword(!showPassword)}
-            inputStyle={styles.input}
             secureTextEntry={!showPassword}
           />
 
           <InputController
-            containerStyle={styles.inputContainer}
             name="confirmPassword"
             control={control}
             rules={{ required: true }}
@@ -108,7 +103,6 @@ export default function SignUpForm() {
             label="Confirmar contraseña"
             hasError={!!errors.confirmPassword?.message?.toString()}
             errorMessage={errors.confirmPassword?.message?.toString()}
-            inputStyle={styles.input}
             secureTextEntry={!showPassword}
             icon={showPassword ? "eye-off" : "eye"}
             onPressIcon={() => setShowPassword(!showPassword)}
@@ -118,17 +112,14 @@ export default function SignUpForm() {
             disabled={isLoading}
             mode="contained"
             onPress={handleSubmit(onSubmit)}
-            buttonColor={colors.secondary}
+            buttonColor={colors.primary}
             style={[
               styles.button,
               styles.buttonContainer,
-              { backgroundColor: colors.secondary },
+              { backgroundColor: colors.primary },
             ]}
-            contentStyle={[
-              styles.button,
-              { backgroundColor: colors.secondary },
-            ]}
-            labelStyle={[styles.button_text, { color: colors.onSecondary }]}
+            contentStyle={[styles.button, { backgroundColor: colors.primary }]}
+            labelStyle={[styles.button_text, { color: colors.onPrimary }]}
           >
             {isLoading ? (
               <ActivityIndicator color={colors.onPrimary} />

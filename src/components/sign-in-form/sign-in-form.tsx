@@ -93,7 +93,6 @@ export default function SignInForm() {
       <ScrollView>
         <View style={styles.formContainer}>
           <InputController
-            containerStyle={styles.inputContainer}
             name="email"
             control={control}
             rules={{ required: true }}
@@ -101,11 +100,9 @@ export default function SignInForm() {
             label="Email"
             hasError={!!errors.email?.message?.toString()}
             errorMessage={errors.email?.message?.toString()}
-            inputStyle={styles.input}
           />
 
           <InputController
-            containerStyle={styles.inputContainer}
             name="password"
             control={control}
             rules={{ required: true }}
@@ -115,7 +112,6 @@ export default function SignInForm() {
             errorMessage={errors.password?.message?.toString()}
             icon={showPassword ? "eye-off" : "eye"}
             onPressIcon={() => setShowPassword(!showPassword)}
-            inputStyle={styles.input}
             secureTextEntry={!showPassword}
           />
 
@@ -126,16 +122,13 @@ export default function SignInForm() {
             style={[
               styles.buttonContainer,
               styles.button,
-              { backgroundColor: colors.secondary },
+              { backgroundColor: colors.primary },
             ]}
-            contentStyle={[
-              styles.button,
-              { backgroundColor: colors.secondary },
-            ]}
-            labelStyle={[styles.button_text, { color: colors.onSecondary }]}
+            contentStyle={[styles.button, { backgroundColor: colors.primary }]}
+            labelStyle={[styles.button_text, { color: colors.onPrimary }]}
           >
             {isLoading ? (
-              <ActivityIndicator color={colors.onSecondary} />
+              <ActivityIndicator color={colors.onPrimary} />
             ) : (
               <> Iniciar Sesión</>
             )}

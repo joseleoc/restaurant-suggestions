@@ -42,7 +42,12 @@ export default function InputController({
           <TextInput
             keyboardType={keyboardType}
             secureTextEntry={secureTextEntry}
-            style={[styles.input, inputStyle]}
+            style={[
+              styles.input,
+              { backgroundColor: colors.surfaceVariant },
+              inputStyle,
+            ]}
+            outlineColor={colors.primary}
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
