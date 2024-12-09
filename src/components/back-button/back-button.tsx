@@ -1,7 +1,7 @@
-import { IconButton } from 'react-native-paper';
-import { router } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { IconButton } from "react-native-paper";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
 
 export default function BackButton() {
   // --- Hooks -----------------------------------------------------------------
@@ -15,9 +15,11 @@ export default function BackButton() {
   // --- END: Data and Handlers ------------------------------------------------
 
   // --- Effects ---------------------------------------------------------------
+
   useEffect(() => {
-    setCanGoBack(router.canGoBack());
-  }, [router.canGoBack()]);
+    const canNavigateBack = router.canGoBack();
+    setCanGoBack(canNavigateBack);
+  }, []);
   // --- END: Effects ----------------------------------------------------------
 
   if (!canGoBack) {
@@ -35,7 +37,7 @@ export default function BackButton() {
 
 const style = StyleSheet.create({
   container: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     top: 5,
     zIndex: 100,

@@ -1,27 +1,27 @@
-import * as yup from 'yup';
+import * as yup from "yup";
 import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   View,
   Text,
-} from 'react-native';
-import { styles } from './sign-in-form.styles';
-import { Controller, useForm } from 'react-hook-form';
+} from "react-native";
+import { styles } from "./sign-in-form.styles";
+import { Controller, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
   Button,
   TextInput,
   useTheme,
-} from 'react-native-paper';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { SignInSchema } from './sign-up-form.schema';
-import { useState } from 'react';
-import { toast } from '@backpackapp-io/react-native-toast';
-import { signIn } from '@/services/auth/auth';
-import { FirebaseError } from 'firebase/app';
-import { FirebaseErrorCodes } from '@/constants/firebase-error-codes';
-import { useStore } from '@/stores';
+} from "react-native-paper";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { SignInSchema } from "./sign-in-form.schema";
+import { useState } from "react";
+import { toast } from "@backpackapp-io/react-native-toast";
+import { signIn } from "@/src/auth/auth";
+import { FirebaseError } from "firebase/app";
+import { FirebaseErrorCodes } from "@/constants/firebase-error-codes";
+import { useStore } from "../../stores/stores";
 
 export default function SignInForm() {
   // --- Hooks -----------------------------------------------------------------
@@ -54,7 +54,7 @@ export default function SignInForm() {
         } catch (error) {
           if (error instanceof FirebaseError) {
             console.error(
-              '🚀 ~ file: sign-in-form.tsx:56 ~ onSubmit ~ error:',
+              "🚀 ~ file: sign-in-form.tsx:56 ~ onSubmit ~ error:",
               error,
             );
             if (error.code in FirebaseErrorCodes) {
@@ -64,17 +64,17 @@ export default function SignInForm() {
                 ],
               );
             } else {
-              toast.error('Error al registrar');
+              toast.error("Error al registrar");
             }
 
             setIsLoading(false);
             return;
           }
         }
-        toast.success('Login exitoso');
+        toast.success("Login exitoso");
         setIsLoading(false);
       } catch (error: any) {
-        console.error('🚀 ~ file: sign-in-form.tsx:36 ~ onSubmit ~ error:', {
+        console.error("🚀 ~ file: sign-in-form.tsx:36 ~ onSubmit ~ error:", {
           code: error.code,
           error,
         });
@@ -84,10 +84,10 @@ export default function SignInForm() {
               FirebaseErrorCodes[error.code as keyof typeof FirebaseErrorCodes],
             );
           } else {
-            toast.error('Error al registrar');
+            toast.error("Error al registrar");
           }
         } else {
-          toast.error('Error al registrar');
+          toast.error("Error al registrar");
         }
         setIsLoading(false);
       }
@@ -97,7 +97,7 @@ export default function SignInForm() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={40}
     >
       <ScrollView>
@@ -142,7 +142,7 @@ export default function SignInForm() {
                   secureTextEntry={!showPassword}
                   right={
                     <TextInput.Icon
-                      icon={showPassword ? 'eye-off' : 'eye'}
+                      icon={showPassword ? "eye-off" : "eye"}
                       onPress={() => setShowPassword(!showPassword)}
                     />
                   }
@@ -169,12 +169,21 @@ export default function SignInForm() {
             disabled={isLoading}
             mode="contained"
             onPress={handleSubmit(onSubmit)}
-            style={styles.button}
+            style={[
+              styles.buttonContainer,
+              styles.button,
+              { backgroundColor: colors.secondary },
+            ]}
+            contentStyle={[
+              styles.button,
+              { backgroundColor: colors.secondary },
+            ]}
+            labelStyle={[styles.button_text, { color: colors.onSecondary }]}
           >
             {isLoading ? (
-              <ActivityIndicator color={colors.onPrimary} />
+              <ActivityIndicator color={colors.onSecondary} />
             ) : (
-              <Text>Registrarme</Text>
+              <> Iniciar Sesión</>
             )}
           </Button>
         </View>

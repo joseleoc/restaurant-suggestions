@@ -1,17 +1,30 @@
-import { Button, Text } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { auth } from '@/firebase';
+import HomePage from "@/src/pages/home.page";
+import { useStore } from "@/src/stores/stores";
+import { useEffect } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Home() {
-  const handleLogout = async () => {
-    await auth.signOut();
-  };
+  // --- Hooks -----------------------------------------------------------------
+  const { user, setCompleteProfileModal } = useStore();
+  // --- END: Hooks ------------------------------------------------------------
+
+  // --- Local State ------------------------------------------------------------
+  // -- END: Local State --------------------------------------------------------
+
+  // --- Data and Handlers ------------------------------------------------------
+  // TODO - descomentar para mostrar modal de completar perfil
+  // useEffect(() => {
+  //   if (user != null && !user.profile_completed) {
+  //     setCompleteProfileModal(true);
+  //   }
+  // }, [user, setCompleteProfileModal]);
+  // -- END: Data and Handlers --------------------------------------------------
+
+  // --- Effects ----------------------------------------------------------------
+  // -- END: Effects ------------------------------------------------------------
   return (
     <SafeAreaView>
-      <Text>Home</Text>
-      <Button onPress={() => handleLogout()} mode="contained-tonal" buttonColor="#3f9">
-        logout
-      </Button>
+      <HomePage />
     </SafeAreaView>
   );
 }
