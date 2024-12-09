@@ -12,7 +12,7 @@ import { signUpSchema } from "./sign-up-form.schema";
 import { FirebaseError } from "firebase/app";
 import { createUser } from "@/src/auth/auth";
 import { FirebaseErrorCodes } from "@/constants/firebase-error-codes";
-import { useStore } from "@/stores";
+import { useStore } from "@/stores/stores";
 
 export default function SignUpForm() {
   // --- Hooks -----------------------------------------------------------------
@@ -171,6 +171,7 @@ export default function SignUpForm() {
             disabled={isLoading}
             mode="contained"
             onPress={handleSubmit(onSubmit)}
+            buttonColor={colors.tertiary}
             style={styles.button}
           >
             {isLoading ? (

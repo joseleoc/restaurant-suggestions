@@ -21,7 +21,8 @@ import { toast } from "@backpackapp-io/react-native-toast";
 import { signIn } from "@/src/auth/auth";
 import { FirebaseError } from "firebase/app";
 import { FirebaseErrorCodes } from "@/constants/firebase-error-codes";
-import { useStore } from "@/stores";
+import { useStore } from "../../stores/stores";
+
 
 export default function SignInForm() {
   // --- Hooks -----------------------------------------------------------------

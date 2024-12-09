@@ -12,7 +12,7 @@ import { Toasts } from "@backpackapp-io/react-native-toast";
 import { auth } from "@/firebase";
 import { getUser } from "@/src/auth/auth";
 import { theme } from "@/src/constants/Colors";
-import { useStore } from "@/stores";
+import { useStore } from "@/src/stores/stores";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
