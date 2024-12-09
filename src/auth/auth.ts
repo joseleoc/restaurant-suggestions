@@ -40,7 +40,7 @@ export const createUser = async (params: {
   });
 };
 
-export const getUser = async (params: { userId: string }) => {
+export const getUser = async (params: { userId: string }): Promise<User> => {
   return new Promise((resolve, reject) => {
     const { userId } = params;
     const userRef = doc(db, "users", userId);

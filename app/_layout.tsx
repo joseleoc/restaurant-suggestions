@@ -4,7 +4,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
-import { PaperProvider } from "react-native-paper";
+import { PaperProvider, Portal } from "react-native-paper";
 
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -13,6 +13,7 @@ import { auth } from "@/firebase";
 import { getUser } from "@/src/auth/auth";
 import { theme } from "@/src/constants/Colors";
 import { useStore } from "@/src/stores/stores";
+import CompleteProfile from "@/src/components/complete-profile-modal/complete-profile-modal";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -65,6 +66,7 @@ export default function RootLayout() {
       unsubscribe();
     };
   }, [resetUser, setUser]);
+
   // --- END: Effects -----------------------------------------------------------
 
   if (!loaded) {
@@ -73,6 +75,9 @@ export default function RootLayout() {
 
   return (
     <PaperProvider theme={theme}>
+      <Portal>
+        <CompleteProfile />
+      </Portal>
       <SafeAreaProvider>
         <GestureHandlerRootView>
           <Stack screenOptions={{ headerShown: false }}>
