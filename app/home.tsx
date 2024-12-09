@@ -12,11 +12,12 @@ export default function Home() {
   // -- END: Local State --------------------------------------------------------
 
   // --- Data and Handlers ------------------------------------------------------
-  useEffect(() => {
-    if (user != null && !user.profile_completed) {
-      setCompleteProfileModal(true);
-    }
-  }, [user, setCompleteProfileModal]);
+  // TODO - descomentar para mostrar modal de completar perfil
+  // useEffect(() => {
+  //   if (user != null && !user.profile_completed) {
+  //     setCompleteProfileModal(true);
+  //   }
+  // }, [user, setCompleteProfileModal]);
   // -- END: Data and Handlers --------------------------------------------------
 
   // --- Effects ----------------------------------------------------------------

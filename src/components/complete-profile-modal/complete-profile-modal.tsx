@@ -24,7 +24,7 @@ export default function CompleteProfile() {
   return (
     <Modal
       visible={completeProfileModalIsOpen}
-      dismissable={false}
+      dismissable={true}
       style={styles.container}
     >
       <SafeAreaView>

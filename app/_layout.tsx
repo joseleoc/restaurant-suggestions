@@ -34,18 +34,15 @@ export default function RootLayout() {
 
   // --- Effects ----------------------------------------------------------------
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
       if (firebaseUser != null && !!firebaseUser.uid) {
         getUser({ userId: firebaseUser.uid })
           .then((user) => {
             setUser(user);
             router.replace("/home");
+            if (loaded) {
+              SplashScreen.hideAsync();
+            }
           })
           .catch((error) => {
             console.error(
@@ -55,6 +52,9 @@ export default function RootLayout() {
             resetUser();
           });
       } else {
+        if (loaded) {
+          SplashScreen.hideAsync();
+        }
         router.replace("/(auth)");
         resetUser();
       }
@@ -65,7 +65,7 @@ export default function RootLayout() {
       resetUser();
       unsubscribe();
     };
-  }, [resetUser, setUser]);
+  }, [resetUser, setUser, loaded]);
 
   // --- END: Effects -----------------------------------------------------------
 
