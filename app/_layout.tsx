@@ -11,7 +11,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Toasts } from '@backpackapp-io/react-native-toast';
 import { useStore } from '@/stores';
 import { auth } from '@/firebase';
-import { getUser } from '@/services/auth/auth';
+import { getUser } from '@/src/auth/auth';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

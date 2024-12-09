@@ -10,7 +10,7 @@ import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { styles } from './sign-up-form.styles';
 import { signUpSchema } from './sign-up-form.schema';
 import { FirebaseError } from 'firebase/app';
-import { createUser } from '@/services/auth/auth';
+import { createUser } from '@/src/auth/auth';
 import { FirebaseErrorCodes } from '@/constants/firebase-error-codes';
 import { useStore } from '@/stores';
 
@@ -43,12 +43,12 @@ export default function SignUpForm() {
         toast.success('Registro exitoso');
         setIsLoading(false);
       } catch (error: any) {
+        setIsLoading(false);
         console.error('🚀 ~ file: sign-up-form.tsx:36 ~ onSubmit ~ error:', {
           code: error.code,
           error,
         });
         if (error instanceof FirebaseError) {
-          console.log('entro al error', { error });
           if (error.code in FirebaseErrorCodes) {
             toast.error(
               FirebaseErrorCodes[error.code as keyof typeof FirebaseErrorCodes],
@@ -56,8 +56,9 @@ export default function SignUpForm() {
           } else {
             toast.error('Error al registrar');
           }
+        } else {
+          toast.error('Error al registrar');
         }
-        setIsLoading(false);
       }
     }
   };

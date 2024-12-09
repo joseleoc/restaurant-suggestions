@@ -18,7 +18,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { SignInSchema } from './sign-up-form.schema';
 import { useState } from 'react';
 import { toast } from '@backpackapp-io/react-native-toast';
-import { signIn } from '@/services/auth/auth';
+import { signIn } from '@/src/auth/auth';
 import { FirebaseError } from 'firebase/app';
 import { FirebaseErrorCodes } from '@/constants/firebase-error-codes';
 import { useStore } from '@/stores';

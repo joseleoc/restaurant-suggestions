@@ -3,8 +3,8 @@ import { ImageBackground, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontStyles } from '@/constants/Styles';
-import SignUpForm from '@/components/sign-up-form/sign-up-form';
-import BackButton from '@/components/back-button/back-button';
+import SignUpForm from '@/src/components/sign-up-form/sign-up-form';
+import BackButton from '@/src/components/back-button/back-button';
 
 export default function SignUp() {
   const { colors } = useTheme();

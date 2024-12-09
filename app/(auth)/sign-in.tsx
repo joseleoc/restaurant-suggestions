@@ -2,8 +2,8 @@ import { ImageBackground, View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import SignInForm from '@/components/sign-in-form/sign-in-form';
-import BackButton from '@/components/back-button/back-button';
+import SignInForm from '@/src/components/sign-in-form/sign-in-form';
+import BackButton from '@/src/components/back-button/back-button';
 
 export default function SignInScreen() {
   return (

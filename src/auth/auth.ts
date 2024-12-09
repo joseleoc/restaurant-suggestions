@@ -4,34 +4,40 @@ import {
     signInWithEmailAndPassword,
 } from 'firebase/auth';
 
-import { User } from '@/types/auth.types';
+import { User } from '@/src/types/auth.types';
 
 import { setDoc, doc, getDoc } from 'firebase/firestore';
 
 export const createUser = async (params: {
     email: string;
     password: string;
-}) => {
+}): Promise<User> => {
     return new Promise(async (resolve, reject) => {
         const { email, password } = params;
-        const userCredential = await createUserWithEmailAndPassword(
-            auth,
-            email,
-            password,
-        );
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                const newUser = new User({
+                    email: user.email || '',
+                    id: user.uid,
+                });
 
-      const user = userCredential.user;
-      const newUser = new User({
-          email: user.email || '',
-          id: user.uid,
-      });
-
-      setDoc(doc(db, 'users', user.uid), { ...newUser })
-          .then(() => {
-              resolve(newUser);
-          })
-          .catch((error) => reject(error));
-  });
+                return Promise.all([
+                    newUser,
+                    setDoc(doc(db, 'users', user.uid), { ...newUser }),
+                ]);
+            })
+            .then(([newUser]) => {
+                resolve(newUser);
+            })
+            .catch((error) => {
+                console.error(
+                    '🚀 ~ file: auth.ts:33 ~ returnnewPromise ~ error:',
+                    error,
+                );
+                reject(error);
+            });
+    });
 };
 
 export const getUser = async (params: { userId: string }) => {
@@ -55,9 +61,9 @@ export const getUser = async (params: { userId: string }) => {
                         resolve(new User(doc.data() as User));
                     }
                 }
-      })
-        .catch((error) => reject(error));
-  });
+            })
+            .catch((error) => reject(error));
+    });
 };
 
 export const signIn = async (params: {
@@ -75,7 +81,7 @@ export const signIn = async (params: {
             try {
                 const user = (
                     await getDoc(doc(db, 'users', userCredential.user.uid))
-                ).data();
+                ).data() as User | undefined;
                 if (user == undefined) {
                     reject(new Error('No existe el usuario'));
                 } else if (user?.is_deleted) {
@@ -87,16 +93,21 @@ export const signIn = async (params: {
                 } else {
                     resolve(new User(user));
                 }
-      } catch (error) {
-          console.error(
-              '🚀 ~ file: auth.ts:91 ~ returnnewPromise ~ error:',
-              error,
-          );
-          reject(error);
-      }
-    } catch (error) {
-        console.error('🚀 ~ file: auth.ts:87 ~ returnnewPromise ~ error:', error);
-        reject(error);
-    }
-  });
+            } catch (error) {
+                console.error(
+                    '🚀 ~ file: auth.ts:91 ~ returnnewPromise ~ error:',
+                    error,
+                );
+                reject(error);
+                return;
+            }
+        } catch (error) {
+            console.error(
+                '🚀 ~ file: auth.ts:104 ~ returnnewPromise ~ error:',
+                error,
+            );
+            reject(error);
+            return;
+        }
+    });
 };
