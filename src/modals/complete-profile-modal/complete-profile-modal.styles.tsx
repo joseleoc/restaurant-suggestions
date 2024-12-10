@@ -12,10 +12,12 @@ export const styles = StyleSheet.create({
   container: {
     padding: 40,
   },
-  formContainer: {
+  card: {
     borderRadius: 15,
     paddingHorizontal: 32,
     paddingVertical: 40,
+  },
+  formContainer: {
     gap: 16,
     alignContent: "center",
     justifyContent: "center",
@@ -23,5 +25,10 @@ export const styles = StyleSheet.create({
   nextButton: {
     alignSelf: "center",
     borderRadius: 5,
+  },
+  backButton: {
+    position: "absolute",
+    left: -30,
+    top: -40,
   },
 });

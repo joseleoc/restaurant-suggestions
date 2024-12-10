@@ -1,19 +1,14 @@
-import {
-  IconButton,
-  Modal,
-  Text,
-  TextInput,
-  useTheme,
-} from "react-native-paper";
+import { Modal, Text, useTheme } from "react-native-paper";
 import { useStore } from "@/stores/stores";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { styles } from "./complete-profile-modal.styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, KeyboardAvoidingView, Platform } from "react-native";
 import { useForm } from "react-hook-form";
-import InputController from "@/src/components/input-controller/Input-controller";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CompleteProfileSchema } from "./complete-profile-form.schema";
+import CompleteProfileStep1 from "./components/complete-profile-step-1";
+import CompleteProfileStep2 from "./components/complete-profile-step-2";
 
 export default function CompleteProfile() {
   // --- Hooks -----------------------------------------------------------------
@@ -22,6 +17,7 @@ export default function CompleteProfile() {
   const {
     handleSubmit,
     control,
+    trigger,
     formState: { errors, isValid },
   } = useForm({
     resolver: yupResolver(CompleteProfileSchema),
@@ -30,13 +26,31 @@ export default function CompleteProfile() {
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Local State ------------------------------------------------------------
+  const [step, setStep] = useState<number>(1);
   // -- END: Local State --------------------------------------------------------
 
   // --- Data and Handlers ------------------------------------------------------
 
   const onsubmit = async (data: any) => {};
 
-  const nextStep = () => {};
+  const nextStep = () => {
+    trigger(["lastName", "phone", "name"]).then((areFieldsValid) => {
+      if (areFieldsValid) {
+        setStep((step) => 2);
+        console.log("step: ", step);
+      }
+    });
+  };
+
+  const previousStep = () => {
+    if (step === 1 || step > 5) return;
+    setStep((step) => step - 1);
+  };
+
+  const handleTitleLabel = useCallback(() => {
+    if (step === 1) return "Completar Perfil";
+    else if (step === 2) return "Preferencias alimenticias";
+  }, [step]);
   // -- END: Data and Handlers --------------------------------------------------
 
   // --- Effects ----------------------------------------------------------------
@@ -58,47 +72,24 @@ export default function CompleteProfile() {
             variant="headlineMedium"
             style={[styles.title, { color: colors.surface }]}
           >
-            Completar Perfil
+            {handleTitleLabel()}
           </Text>
 
-          <View
-            style={[styles.formContainer, { backgroundColor: colors.surface }]}
-          >
-            <InputController
-              name="name"
-              control={control}
-              rules={{ required: true }}
-              label="Nombre"
-              hasError={!!errors.name?.message?.toString()}
-              errorMessage={errors.name?.message?.toString()}
-            />
+          <View style={[styles.card, { backgroundColor: colors.surface }]}>
+            {step === 1 && (
+              <CompleteProfileStep1
+                control={control}
+                setNextStep={nextStep}
+                errors={errors}
+              />
+            )}
 
-            <InputController
-              name="lastName"
-              control={control}
-              rules={{ required: true }}
-              label="Apellido"
-              hasError={!!errors.lastName?.message?.toString()}
-              errorMessage={errors.lastName?.message?.toString()}
-            />
-
-            <InputController
-              name="phone"
-              control={control}
-              rules={{ required: true }}
-              label="Número de Teléfono"
-              hasError={!!errors.phone?.message?.toString()}
-              errorMessage={errors.phone?.message?.toString()}
-              keyboardType="phone-pad"
-            />
-
-            <IconButton
-              icon="arrow-right"
-              style={styles.nextButton}
-              iconColor={colors.onPrimary}
-              containerColor={colors.primary}
-              onPress={() => nextStep()}
-            />
+            {step === 2 && (
+              <CompleteProfileStep2
+                previousStep={previousStep}
+                control={control}
+              />
+            )}
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
