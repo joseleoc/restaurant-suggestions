@@ -44,8 +44,8 @@ export default function InputController({
             secureTextEntry={secureTextEntry}
             style={[
               styles.input,
-              { backgroundColor: colors.surfaceVariant },
               inputStyle,
+              { backgroundColor: colors.surface },
             ]}
             outlineColor={colors.primary}
             value={value}

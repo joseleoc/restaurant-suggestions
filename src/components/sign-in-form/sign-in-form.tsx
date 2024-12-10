@@ -61,7 +61,6 @@ export default function SignInForm() {
             return;
           }
         }
-        toast.success("Login exitoso");
         setIsLoading(false);
       } catch (error: any) {
         console.error("🚀 ~ file: sign-in-form.tsx:36 ~ onSubmit ~ error:", {

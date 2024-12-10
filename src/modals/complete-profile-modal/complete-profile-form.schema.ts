@@ -10,4 +10,5 @@ export const CompleteProfileSchema = yup.object({
         .string()
         .matches(phoneRegExp, "Número de teléfono no es válido")
         .required("Telefono es requerido"),
+    allergies: yup.string(),
 });

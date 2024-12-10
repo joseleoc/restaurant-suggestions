@@ -4,7 +4,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
-import { PaperProvider, Portal } from "react-native-paper";
+import { PaperProvider, Portal, useTheme } from "react-native-paper";
 
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -24,6 +24,7 @@ export default function RootLayout() {
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
   const { setUser, resetUser } = useStore();
+  const { colors } = useTheme();
   // --- END: Hooks ------------------------------------------------------------
 
   // -- Local State -------------------------------------------------------------
@@ -85,7 +86,7 @@ export default function RootLayout() {
             <Stack.Screen name="home" />
             <Stack.Screen name="+not-found" />
           </Stack>
-          <StatusBar style="auto" />
+          <StatusBar style="dark" backgroundColor={colors.secondary} />
           <Toasts />
         </GestureHandlerRootView>
       </SafeAreaProvider>

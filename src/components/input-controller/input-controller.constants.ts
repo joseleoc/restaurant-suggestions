@@ -4,7 +4,7 @@ import { TextStyle, ViewStyle } from "react-native";
 export type InputControllerProps = {
     name: string;
     control: Control<any> | undefined;
-    rules:
+    rules?:
     | Omit<
         RegisterOptions<FieldValues, string>,
         "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled"
