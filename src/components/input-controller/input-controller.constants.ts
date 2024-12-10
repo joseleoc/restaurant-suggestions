@@ -16,7 +16,6 @@ export type InputControllerProps = {
     errorMessage?: string;
     inputStyle?: TextStyle;
     containerStyle?: ViewStyle;
-    errorMessageStyle?: TextStyle;
     icon?: string;
     onPressIcon?: () => void;
     secureTextEntry?: boolean

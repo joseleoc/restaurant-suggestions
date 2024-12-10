@@ -1,6 +1,6 @@
 import { Controller } from "react-hook-form";
 import { View } from "react-native";
-import { TextInput, Text, useTheme } from "react-native-paper";
+import { TextInput, Text, useTheme, HelperText } from "react-native-paper";
 import { styles } from "./input-controller.styles";
 import { InputControllerProps } from "./input-controller.constants";
 
@@ -14,7 +14,6 @@ export default function InputController({
   errorMessage,
   inputStyle,
   containerStyle,
-  errorMessageStyle,
   icon,
   onPressIcon,
   secureTextEntry,
@@ -41,7 +40,7 @@ export default function InputController({
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
             keyboardType={keyboardType}
-            secureTextEntry={secureTextEntry}
+            secureTextEntry={secureTextEntry || false}
             style={[
               styles.input,
               inputStyle,
@@ -64,18 +63,9 @@ export default function InputController({
           />
         )}
       />
-
-      {hasError && (
-        <Text
-          style={[
-            styles.errorMessage,
-            { color: colors.error, backgroundColor: colors.onBackground },
-            errorMessageStyle,
-          ]}
-        >
-          {errorMessage}
-        </Text>
-      )}
+      <HelperText visible={hasError} type="error">
+        {errorMessage}
+      </HelperText>
     </View>
   );
 }

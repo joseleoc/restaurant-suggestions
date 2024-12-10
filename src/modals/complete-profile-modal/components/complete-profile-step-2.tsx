@@ -3,6 +3,7 @@ import { IconButton } from "react-native-paper";
 import { styles } from "../complete-profile-modal.styles";
 import { Control } from "react-hook-form";
 import InputController from "@/src/components/input-controller/Input-controller";
+import { FlatList } from "react-native-gesture-handler";
 
 interface CompleteProfileStep2Props {
   previousStep: () => void;
