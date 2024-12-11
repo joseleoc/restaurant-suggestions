@@ -19,6 +19,7 @@ export const styles = StyleSheet.create({
   },
   formContainer: {
     gap: 16,
+    marginTop: 10,
     alignContent: "center",
     justifyContent: "center",
   },
@@ -30,5 +31,18 @@ export const styles = StyleSheet.create({
     position: "absolute",
     left: -30,
     top: -40,
+  },
+  loader: {
+    height: 40,
+    width: 40,
+    borderRadius: 5,
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  allergiesListItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
   },
 });

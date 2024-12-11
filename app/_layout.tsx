@@ -5,6 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
 import { PaperProvider, Portal, useTheme } from "react-native-paper";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -25,6 +26,8 @@ export default function RootLayout() {
   });
   const { setUser, resetUser } = useStore();
   const { colors } = useTheme();
+  const queryClient = new QueryClient();
+
   // --- END: Hooks ------------------------------------------------------------
 
   // -- Local State -------------------------------------------------------------
@@ -75,21 +78,23 @@ export default function RootLayout() {
   }
 
   return (
-    <PaperProvider theme={theme}>
-      <Portal>
-        <CompleteProfile />
-      </Portal>
-      <SafeAreaProvider>
-        <GestureHandlerRootView>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(auth)" />
-            <Stack.Screen name="home" />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-          <StatusBar style="dark" backgroundColor={colors.secondary} />
-          <Toasts />
-        </GestureHandlerRootView>
-      </SafeAreaProvider>
-    </PaperProvider>
+    <QueryClientProvider client={queryClient}>
+      <PaperProvider theme={theme}>
+        <SafeAreaProvider>
+          <GestureHandlerRootView>
+            <Portal>
+              <CompleteProfile />
+            </Portal>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(auth)" />
+              <Stack.Screen name="home" />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+            <StatusBar style="dark" backgroundColor={colors.secondary} />
+            <Toasts />
+          </GestureHandlerRootView>
+        </SafeAreaProvider>
+      </PaperProvider>
+    </QueryClientProvider>
   );
 }
