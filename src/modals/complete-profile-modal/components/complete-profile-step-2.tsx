@@ -1,6 +1,6 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Control, Controller } from "react-hook-form";
-import { FlatList, Pressable, View } from "react-native";
+import { FlatList, Keyboard, Pressable, View } from "react-native";
 import { Checkbox, IconButton, Text, useTheme } from "react-native-paper";
 
 import { Allergy } from "@/src/types/general.types";
@@ -51,7 +51,7 @@ export default function CompleteProfileStep2({
     >
       <Checkbox
         color={colors.primary}
-        uncheckedColor={colors.secondary}
+        uncheckedColor={colors.primary}
         status={isSelected(item.id) ? "checked" : "unchecked"}
       />
       <Text>{item.name}</Text>
@@ -60,8 +60,14 @@ export default function CompleteProfileStep2({
 
   // -- END: Data and Handlers --------------------------------------------------
 
+  // --- Effects ----------------------------------------------------------------
+  useEffect(() => {
+    Keyboard.dismiss();
+  }, []);
+  // -- END: Effects ------------------------------------------------------------
+
   return (
-    <View style={styles.formContainer}>
+    <View style={[styles.formContainer, { paddingTop: 15 }]}>
       <Controller
         control={control}
         name="allergies"

@@ -7,7 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { SignInSchema } from "./sign-in-form.schema";
 import { useState } from "react";
 import { toast } from "@backpackapp-io/react-native-toast";
-import { signIn } from "@/src/auth/auth";
+import { signIn } from "@/src/services/users.service";
 import { FirebaseError } from "firebase/app";
 import { FirebaseErrorCodes } from "@/constants/firebase-error-codes";
 import { useStore } from "../../stores/stores";

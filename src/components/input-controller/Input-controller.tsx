@@ -1,6 +1,6 @@
 import { Controller } from "react-hook-form";
 import { View } from "react-native";
-import { TextInput, Text, useTheme, HelperText } from "react-native-paper";
+import { TextInput, useTheme, HelperText } from "react-native-paper";
 import { styles } from "./input-controller.styles";
 import { InputControllerProps } from "./input-controller.constants";
 
@@ -17,6 +17,7 @@ export default function InputController({
   icon,
   onPressIcon,
   secureTextEntry,
+  autoFocus,
 }: InputControllerProps) {
   // --- Hooks -----------------------------------------------------------------
   const { colors } = useTheme();
@@ -39,6 +40,7 @@ export default function InputController({
         rules={rules}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
+            autoFocus={autoFocus || false}
             keyboardType={keyboardType}
             secureTextEntry={secureTextEntry || false}
             style={[
@@ -69,3 +71,4 @@ export default function InputController({
     </View>
   );
 }
+

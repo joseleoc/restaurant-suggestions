@@ -1,17 +1,17 @@
+import "react-native-reanimated";
+import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import { router, Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
-import "react-native-reanimated";
+import * as SplashScreen from "expo-splash-screen";
+import { Toasts } from "@backpackapp-io/react-native-toast";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { PaperProvider, Portal, useTheme } from "react-native-paper";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Toasts } from "@backpackapp-io/react-native-toast";
 import { auth } from "@/firebase";
-import { getUser } from "@/src/auth/auth";
+import { getUser } from "@/src/services/users.service";
 import { theme } from "@/src/constants/Colors";
 import { useStore } from "@/src/stores/stores";
 import CompleteProfile from "@/src/modals/complete-profile-modal/complete-profile-modal";

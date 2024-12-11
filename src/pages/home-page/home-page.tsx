@@ -1,11 +1,9 @@
 import { View } from "react-native";
 import { Button, Text } from "react-native-paper";
-import { auth } from "@/firebase";
+import { useSignOut } from "@/src/hooks/users";
 
 export default function HomePage() {
-  const handleLogout = async () => {
-    await auth.signOut();
-  };
+  const { mutateAsync: handleLogout } = useSignOut();
   return (
     <View>
       <Text>Home</Text>

@@ -1,9 +1,10 @@
-import { View } from "react-native";
+import { ScrollView, TextInput } from "react-native";
 import { Control, FieldErrors } from "react-hook-form";
 
 import InputController from "@/src/components/input-controller/Input-controller";
 
 import { styles } from "../complete-profile-modal.styles";
+import { useEffect, useRef } from "react";
 
 export interface CompleteProfileStep1Props {
   control: Control<any> | undefined;
@@ -23,12 +24,23 @@ export default function CompleteProfileStep1({
 
   // --- END: Hooks ------------------------------------------------------------
 
-  // --- Data and Handlers ------------------------------------------------------
+  // --- Refs ------------------------------------------------------------------
+  const firstInputRef = useRef(null);
+  // --- END: Refs -------------------------------------------------------------
 
+  // --- Data and Handlers ------------------------------------------------------
   // -- END: Data and Handlers --------------------------------------------------
 
+  // --- Effects ----------------------------------------------------------------
+  useEffect(() => {
+    if (firstInputRef.current) {
+      (firstInputRef.current as TextInput).focus();
+    }
+  }, [firstInputRef]);
+  // -- END: Effects ------------------------------------------------------------
+
   return (
-    <View style={styles.formContainer}>
+    <ScrollView style={styles.formContainer}>
       <InputController
         name="name"
         control={control}
@@ -56,6 +68,6 @@ export default function CompleteProfileStep1({
         errorMessage={errors.phone?.message?.toString()}
         keyboardType="phone-pad"
       />
-    </View>
+    </ScrollView>
   );
 }

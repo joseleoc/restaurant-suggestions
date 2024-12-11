@@ -1,5 +1,6 @@
+import { RefObject } from "react";
 import { Control, FieldValues, RegisterOptions } from "react-hook-form";
-import { TextStyle, ViewStyle } from "react-native";
+import { TextInput, TextStyle, ViewStyle } from "react-native";
 
 export type InputControllerProps = {
     name: string;
@@ -18,5 +19,6 @@ export type InputControllerProps = {
     containerStyle?: ViewStyle;
     icon?: string;
     onPressIcon?: () => void;
-    secureTextEntry?: boolean
+    secureTextEntry?: boolean;
+    autoFocus?: boolean;
 };

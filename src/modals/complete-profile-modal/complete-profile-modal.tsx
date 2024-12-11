@@ -4,9 +4,10 @@ import {
   Text,
   useTheme,
   ActivityIndicator,
+  Button,
 } from "react-native-paper";
 import { useForm } from "react-hook-form";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, KeyboardAvoidingView, Platform } from "react-native";
@@ -20,12 +21,20 @@ import { Allergy } from "@/src/types/general.types";
 import { CompleteProfileSchema } from "./complete-profile-form.schema";
 
 import { styles } from "./complete-profile-modal.styles";
+import { useUpdateUser } from "@/src/hooks/users";
+import { toast } from "@backpackapp-io/react-native-toast";
 
 export default function CompleteProfile() {
   // --- Hooks -----------------------------------------------------------------
   const { colors } = useTheme();
-  const { completeProfileModalIsOpen, pendingAllergies, allergies } =
-    useStore();
+
+  const {
+    completeProfileModalIsOpen,
+    setCompleteProfileModal,
+    pendingAllergies,
+    allergies,
+    user,
+  } = useStore();
   const {
     handleSubmit,
     control,
@@ -39,7 +48,11 @@ export default function CompleteProfile() {
       allergies: [],
     },
   });
-
+  const {
+    mutateAsync: updateUser,
+    status: updateUserStatus,
+    data: updateUserResponse,
+  } = useUpdateUser();
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Local State ------------------------------------------------------------
@@ -51,10 +64,19 @@ export default function CompleteProfile() {
   // --- Data and Handlers ------------------------------------------------------
 
   const onsubmit = useCallback(() => {
-    if (isValid && isLoading === false) {
+    if (isValid && isLoading === false && user) {
       setIsLoading(true);
+      const userId = user.id;
+      const updatedUser = user;
+      const formValues = getValues();
+      updatedUser.first_name = formValues.name;
+      updatedUser.last_name = formValues.lastName;
+      updatedUser.phone_number = formValues.phone;
+      updatedUser.allergies = formValues.allergies;
+      updatedUser.profile_completed = true;
+      updateUser({ userId, data: updatedUser });
     }
-  }, [isLoading, isValid]);
+  }, [getValues, isLoading, isValid, updateUser, user]);
 
   const selectAllergy = (allergy: Allergy) => {
     const selectedAllergies = getValues("allergies") || [];
@@ -98,6 +120,20 @@ export default function CompleteProfile() {
 
   // --- Effects ----------------------------------------------------------------
 
+  useEffect(() => {
+    if (updateUserStatus === "success") {
+      toast.success("Datos actualizados");
+      setIsLoading(false);
+      setCompleteProfileModal(false);
+    }
+    if (updateUserStatus === "error") {
+      toast.error("Error al actualizar datos");
+    }
+    if (updateUserStatus === "pending") {
+      setIsLoading(true);
+    }
+  }, [updateUserResponse, updateUserStatus]);
+
   // -- END: Effects ------------------------------------------------------------
 
   return (
@@ -107,18 +143,35 @@ export default function CompleteProfile() {
       style={styles.container}
     >
       <SafeAreaView>
+        <Text
+          variant="headlineMedium"
+          style={[styles.title, { color: colors.surface }]}
+        >
+          {handleTitleLabel()}
+        </Text>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           keyboardVerticalOffset={40}
         >
-          <Text
-            variant="headlineMedium"
-            style={[styles.title, { color: colors.surface }]}
-          >
-            {handleTitleLabel()}
-          </Text>
-
           <View style={[styles.card, { backgroundColor: colors.surface }]}>
+            {pendingAllergies || isLoading ? (
+              <Button
+                style={[styles.loader, { backgroundColor: colors.primary }]}
+                mode="text"
+              >
+                <ActivityIndicator color={colors.onPrimary} size="small" />
+              </Button>
+            ) : (
+              <IconButton
+                disabled={isLoading}
+                icon={step === 1 ? "arrow-right" : "content-save-all"}
+                style={styles.nextButton}
+                iconColor={colors.onPrimary}
+                containerColor={colors.primary}
+                onPress={handleButtonAction}
+              />
+            )}
+
             {step === 1 && (
               <CompleteProfileStep1 control={control} errors={errors} />
             )}
@@ -130,22 +183,6 @@ export default function CompleteProfile() {
                 allergies={allergies}
                 previousStep={previousStep}
                 control={control}
-              />
-            )}
-
-            {pendingAllergies ? (
-              <View
-                style={[styles.loader, { backgroundColor: colors.primary }]}
-              >
-                <ActivityIndicator color={colors.onPrimary} />
-              </View>
-            ) : (
-              <IconButton
-                icon={step === 1 ? "arrow-right" : "content-save-all"}
-                style={styles.nextButton}
-                iconColor={colors.onPrimary}
-                containerColor={colors.primary}
-                onPress={handleButtonAction}
               />
             )}
           </View>

@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   title: {
@@ -15,30 +15,31 @@ export const styles = StyleSheet.create({
   card: {
     borderRadius: 15,
     paddingHorizontal: 32,
-    paddingVertical: 40,
+    maxHeight: Dimensions.get("screen").height / 2,
   },
   formContainer: {
     gap: 16,
-    marginTop: 10,
     alignContent: "center",
-    justifyContent: "center",
-  },
-  nextButton: {
-    alignSelf: "center",
-    borderRadius: 5,
+    maxHeight: Dimensions.get("screen").height / 2 - 100,
+    paddingBottom: 20,
   },
   backButton: {
     position: "absolute",
-    left: -30,
-    top: -40,
+    left: -10,
+    top: -70,
+  },
+  nextButton: {
+    alignSelf: "flex-end",
+    borderRadius: 5,
+    marginBottom: 20,
   },
   loader: {
-    height: 40,
-    width: 40,
     borderRadius: 5,
-    alignSelf: "center",
+    alignSelf: "flex-end",
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 20,
+    marginTop: 10,
   },
   allergiesListItem: {
     flexDirection: "row",

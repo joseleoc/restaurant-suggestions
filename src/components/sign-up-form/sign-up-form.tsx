@@ -10,7 +10,7 @@ import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import { styles } from "./sign-up-form.styles";
 import { signUpSchema } from "./sign-up-form.schema";
 import { FirebaseError } from "firebase/app";
-import { createUser } from "@/src/auth/auth";
+import { createUser } from "@/src/services/users.service";
 import { FirebaseErrorCodes } from "@/constants/firebase-error-codes";
 import { useStore } from "@/stores/stores";
 import InputController from "../input-controller/Input-controller";
