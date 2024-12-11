@@ -1,17 +1,20 @@
-import { useFonts } from 'expo-font';
-import { router, Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-import { PaperProvider } from 'react-native-paper';
-import { theme } from '../constants/Colors';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Toasts } from '@backpackapp-io/react-native-toast';
-import { useStore } from '@/stores';
-import { auth } from '@/firebase';
-import { getUser } from '@/services/auth/auth';
+import "react-native-reanimated";
+import { useEffect } from "react";
+import { useFonts } from "expo-font";
+import { router, Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import * as SplashScreen from "expo-splash-screen";
+import { Toasts } from "@backpackapp-io/react-native-toast";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { PaperProvider, Portal, useTheme } from "react-native-paper";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+import { auth } from "@/firebase";
+import { getUser } from "@/src/services/users.service";
+import { theme } from "@/src/constants/Colors";
+import { useStore } from "@/src/stores/stores";
+import CompleteProfile from "@/src/modals/complete-profile-modal/complete-profile-modal";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -19,9 +22,12 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   // --- Hooks -----------------------------------------------------------------
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
-  const { user, setUser, resetUser } = useStore();
+  const { setUser, resetUser } = useStore();
+  const { colors } = useTheme();
+  const queryClient = new QueryClient();
+
   // --- END: Hooks ------------------------------------------------------------
 
   // -- Local State -------------------------------------------------------------
@@ -32,25 +38,28 @@ export default function RootLayout() {
 
   // --- Effects ----------------------------------------------------------------
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
       if (firebaseUser != null && !!firebaseUser.uid) {
         getUser({ userId: firebaseUser.uid })
           .then((user) => {
             setUser(user);
-            router.replace('/home');
+            router.replace("/home");
+            if (loaded) {
+              SplashScreen.hideAsync();
+            }
           })
           .catch((error) => {
-            console.error('🚀 ~ file: _layout.tsx:48 ~ getUser ~ error:', error);
+            console.error(
+              "🚀 ~ file: _layout.tsx:48 ~ getUser ~ error:",
+              error,
+            );
             resetUser();
           });
       } else {
-        router.replace('/(auth)');
+        if (loaded) {
+          SplashScreen.hideAsync();
+        }
+        router.replace("/(auth)");
         resetUser();
       }
     });
@@ -60,7 +69,8 @@ export default function RootLayout() {
       resetUser();
       unsubscribe();
     };
-  }, []);
+  }, [resetUser, setUser, loaded]);
+
   // --- END: Effects -----------------------------------------------------------
 
   if (!loaded) {
@@ -68,18 +78,23 @@ export default function RootLayout() {
   }
 
   return (
-    <PaperProvider theme={theme}>
-      <SafeAreaProvider>
-        <GestureHandlerRootView>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(auth)" />
-            <Stack.Screen name="home" />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-          <StatusBar style="auto" />
-          <Toasts />
-        </GestureHandlerRootView>
-      </SafeAreaProvider>
-    </PaperProvider>
+    <QueryClientProvider client={queryClient}>
+      <PaperProvider theme={theme}>
+        <SafeAreaProvider>
+          <GestureHandlerRootView>
+            <Portal>
+              <CompleteProfile />
+            </Portal>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(auth)" />
+              <Stack.Screen name="home" />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+            <StatusBar style="dark" backgroundColor={colors.secondary} />
+            <Toasts />
+          </GestureHandlerRootView>
+        </SafeAreaProvider>
+      </PaperProvider>
+    </QueryClientProvider>
   );
 }
