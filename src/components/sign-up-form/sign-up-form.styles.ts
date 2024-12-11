@@ -19,11 +19,4 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 20,
   },
-  inputContainer: {},
-  input: {},
-  errorMessage: {
-    height: 20,
-    fontWeight: "semibold",
-    paddingHorizontal: 8,
-  },
 });

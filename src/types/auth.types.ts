@@ -9,6 +9,8 @@ export class User {
   profile_completed?: boolean;
   created_at?: Date;
   updated_at?: Date;
+  phone_number?: string;
+  allergies?: string[];
 
   constructor(data: User) {
     Object.assign(this, data);
@@ -19,5 +21,7 @@ export class User {
     this.is_deleted = data.is_deleted || false;
     this.is_active = data.is_active || true;
     this.profile_completed = data.profile_completed || false;
+    this.phone_number = data.phone_number || "";
+    this.allergies = data.allergies || [];
   }
 }

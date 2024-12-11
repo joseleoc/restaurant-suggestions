@@ -64,13 +64,13 @@ export default function Welcome() {
               onPress={() => handleNavigate("sign-in")}
               mode="contained"
               textColor={colors.onSecondary}
-              buttonColor={colors.secondary}
-              style={[styles.button, { backgroundColor: colors.secondary }]}
+              buttonColor={colors.primary}
+              style={[styles.button, { backgroundColor: colors.primary }]}
               contentStyle={[
                 styles.button,
-                { backgroundColor: colors.secondary },
+                { backgroundColor: colors.primary },
               ]}
-              labelStyle={[styles.button_text]}
+              labelStyle={[styles.button_text, { color: colors.onPrimary }]}
             >
               Iniciar sesión
             </Button>

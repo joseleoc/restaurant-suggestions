@@ -1,19 +1,20 @@
+import "react-native-reanimated";
+import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import { router, Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
-import "react-native-reanimated";
-import { PaperProvider, Portal } from "react-native-paper";
-
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import * as SplashScreen from "expo-splash-screen";
 import { Toasts } from "@backpackapp-io/react-native-toast";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { PaperProvider, Portal, useTheme } from "react-native-paper";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import { auth } from "@/firebase";
-import { getUser } from "@/src/auth/auth";
+import { getUser } from "@/src/services/users.service";
 import { theme } from "@/src/constants/Colors";
 import { useStore } from "@/src/stores/stores";
-import CompleteProfile from "@/src/components/complete-profile-modal/complete-profile-modal";
+import CompleteProfile from "@/src/modals/complete-profile-modal/complete-profile-modal";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -24,6 +25,9 @@ export default function RootLayout() {
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
   const { setUser, resetUser } = useStore();
+  const { colors } = useTheme();
+  const queryClient = new QueryClient();
+
   // --- END: Hooks ------------------------------------------------------------
 
   // -- Local State -------------------------------------------------------------
@@ -74,21 +78,23 @@ export default function RootLayout() {
   }
 
   return (
-    <PaperProvider theme={theme}>
-      <Portal>
-        <CompleteProfile />
-      </Portal>
-      <SafeAreaProvider>
-        <GestureHandlerRootView>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(auth)" />
-            <Stack.Screen name="home" />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-          <StatusBar style="auto" />
-          <Toasts />
-        </GestureHandlerRootView>
-      </SafeAreaProvider>
-    </PaperProvider>
+    <QueryClientProvider client={queryClient}>
+      <PaperProvider theme={theme}>
+        <SafeAreaProvider>
+          <GestureHandlerRootView>
+            <Portal>
+              <CompleteProfile />
+            </Portal>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(auth)" />
+              <Stack.Screen name="home" />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+            <StatusBar style="dark" backgroundColor={colors.secondary} />
+            <Toasts />
+          </GestureHandlerRootView>
+        </SafeAreaProvider>
+      </PaperProvider>
+    </QueryClientProvider>
   );
 }
