@@ -7,8 +7,11 @@ import { useEffect } from "react";
 export default function RestaurantSuggestions() {
   // --- Hooks -----------------------------------------------------------------
   const { user } = useStore();
-  const { mutate: fetchRecommendedRestaurants } =
-    useRecommendedRestaurantsFetch();
+  const { data: restaurants, refetch } = useRecommendedRestaurantsFetch({
+    allergies: user?.allergies || [],
+    page_size: 10,
+    page: 0,
+  });
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Local State ------------------------------------------------------------
@@ -20,17 +23,22 @@ export default function RestaurantSuggestions() {
   // --- Effects ----------------------------------------------------------------
   useEffect(() => {
     if (user != null && user.profile_completed && user.allergies != null) {
-      fetchRecommendedRestaurants({
-        allergies: user.allergies || [],
-        page_size: 10,
-        page: 1,
-      });
+      console.info("Refetching restaurants");
+      refetch();
     }
-  }, [user, fetchRecommendedRestaurants]);
+  }, [refetch, user]);
+
+  useEffect(() => {
+    if (restaurants != null) {
+      console.log(restaurants.length);
+    }
+  }, [restaurants]);
   // -- END: Effects ------------------------------------------------------------
   return (
     <View>
-      <Text>Suggestions Slider</Text>
+      {restaurants?.map((restaurant) => {
+        return <Text key={restaurant.id}>{restaurant.name}</Text>;
+      })}
     </View>
   );
 }

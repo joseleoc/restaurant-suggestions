@@ -3,6 +3,7 @@ import { QueryKeys } from "../constants/query-keys";
 import { useStore } from "@/stores/stores";
 import { Allergy } from "../types/general.types";
 import { fetchAllergies } from "../services/allergies.service";
+import { useEffect } from "react";
 
 export function useAllAllergiesFetch() {
     // --- Hooks -----------------------------------------------------------------
@@ -27,6 +28,14 @@ export function useAllAllergiesFetch() {
       enabled: !!user,
   });
     // --- END: Hooks ------------------------------------------------------------
+
+    // --- Effects ----------------------------------------------------------------
+    useEffect(() => {
+        if (user != null && user.profile_completed && user.allergies != null) {
+            query.refetch();
+        }
+    }, [query, user]);
+    // -- END: Effects ------------------------------------------------------------
 
     return query;
 }
