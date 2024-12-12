@@ -10,6 +10,7 @@ export default function Home() {
   const { user, setCompleteProfileModal } = useStore();
   const pathName = usePathname();
   useAllAllergiesFetch();
+
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Local State ------------------------------------------------------------

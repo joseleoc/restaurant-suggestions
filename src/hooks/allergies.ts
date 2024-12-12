@@ -6,17 +6,17 @@ import { fetchAllergies } from "../services/allergies.service";
 
 export function useAllAllergiesFetch() {
     // --- Hooks -----------------------------------------------------------------
-    const { user, setPendingAllergies, setAllergies, allergies } = useStore();
+    const { user, setPendingAllergies, setAllergies } = useStore();
 
     const query = useQuery({
         queryKey: [QueryKeys.allergies],
         queryFn: async (): Promise<Allergy[]> => {
             return new Promise((resolve) => {
                 setPendingAllergies(true);
-          fetchAllergies().then((allergies) => {
-              setAllergies(allergies);
-              resolve(allergies);
-              setPendingAllergies(false);
+                fetchAllergies().then((allergies) => {
+                    setAllergies(allergies);
+                    resolve(allergies);
+                    setPendingAllergies(false);
         });
       });
       },
