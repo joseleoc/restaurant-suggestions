@@ -40,10 +40,9 @@ export default function RestaurantSuggestions() {
         Restaurantes recomendados
       </Text>
       <Animated.View
-        style={[styles.scrollContainer, { backgroundColor: colors.tertiary }]}
+        style={[styles.scrollContainer, { backgroundColor: colors.secondary }]}
       >
         <Animated.ScrollView
-          horizontal
           style={styles.scrollView}
           contentContainerStyle={styles.scrollViewContent}
           showsHorizontalScrollIndicator={false}

@@ -35,7 +35,7 @@ export default function PlatesSuggestions() {
         Platos recomendados
       </Text>
       <Animated.View
-        style={[styles.scrollContainer, { backgroundColor: colors.tertiary }]}
+        style={[styles.scrollContainer, { backgroundColor: colors.secondary }]}
       >
         <Animated.ScrollView
           horizontal
