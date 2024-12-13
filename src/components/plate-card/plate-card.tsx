@@ -41,7 +41,7 @@ export default function PlateCard({ plate }: PlateCardProps) {
             style={[styles.priceLabel, { color: colors.primary }]}
             variant="headlineSmall"
           >
-            ${plate.price?.toFixed(2) || 0}
+            ${plate.price ? Number(plate.price).toFixed(2) : 0}
           </Text>
           <IconButton
             icon={liked ? "heart" : "heart-outline"}

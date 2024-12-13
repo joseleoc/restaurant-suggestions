@@ -28,7 +28,6 @@ export default function HomePage() {
         <PlatesSuggestions />
         <RestaurantSuggestions />
       </View>
-      {/* <Button onPress={() => signOut()}>Sign Out</Button> */}
     </ScrollView>
   );
 }

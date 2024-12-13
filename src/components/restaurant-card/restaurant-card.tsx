@@ -11,17 +11,27 @@ export interface RestaurantCardProps {
 export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
   return (
     <View style={[styles.container, { backgroundColor: "#fff" }]}>
-      <Image
-        source={restaurant.images[0]}
-        style={styles.image}
-        accessibilityLabel={restaurant.name}
-        alt={restaurant.name + " image"}
-        contentFit="cover"
-      />
+      <View style={styles.imageContainer}>
+        <Image
+          source={restaurant.images[0]}
+          style={styles.backImage}
+          accessibilityLabel={restaurant.name}
+          alt={restaurant.name + " image"}
+          contentFit="fill"
+          blurRadius={10}
+        />
+        <Image
+          source={restaurant.images[0]}
+          style={styles.image}
+          accessibilityLabel={restaurant.name}
+          alt={restaurant.name + " image"}
+          contentFit="contain"
+        />
+      </View>
       <View style={styles.content}>
         <Text
           style={styles.title}
-          variant="titleMedium"
+          variant="headlineSmall"
           numberOfLines={2}
           ellipsizeMode="tail"
         >
