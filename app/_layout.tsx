@@ -15,6 +15,8 @@ import { getUser } from "@/src/services/users.service";
 import { theme } from "@/src/constants/Colors";
 import { useStore } from "@/src/stores/stores";
 import CompleteProfile from "@/src/modals/complete-profile-modal/complete-profile-modal";
+import LogoutButton from "@/src/components/logout-button/logout-button";
+import HeaderIcon from "@/src/components/header-icon/header-icon";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -27,7 +29,6 @@ export default function RootLayout() {
   const { setUser, resetUser } = useStore();
   const { colors } = useTheme();
   const queryClient = new QueryClient();
-
   // --- END: Hooks ------------------------------------------------------------
 
   // -- Local State -------------------------------------------------------------
@@ -85,9 +86,22 @@ export default function RootLayout() {
             <Portal>
               <CompleteProfile />
             </Portal>
-            <Stack screenOptions={{ headerShown: false }}>
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                contentStyle: { backgroundColor: "#fad14b" },
+              }}
+            >
               <Stack.Screen name="(auth)" />
-              <Stack.Screen name="home" />
+              <Stack.Screen
+                name="home"
+                options={{
+                  headerShown: true,
+                  title: "Healthy food",
+                  headerRight: () => <LogoutButton />,
+                  headerLeft: () => <HeaderIcon />,
+                }}
+              />
               <Stack.Screen name="+not-found" />
             </Stack>
             <StatusBar style="dark" backgroundColor={colors.secondary} />

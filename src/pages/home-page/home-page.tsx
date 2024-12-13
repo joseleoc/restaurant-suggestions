@@ -4,6 +4,7 @@ import { styles } from "./home-page.styles";
 import RestaurantSuggestions from "@/src/components/restaurants-suggestions/restaurant-suggestions";
 import PlatesSuggestions from "@/src/components/plates-suggestions/plates-suggestions";
 import { useSignOut } from "@/src/hooks/users";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function HomePage() {
   // --- Hooks -----------------------------------------------------------------
@@ -15,19 +16,19 @@ export default function HomePage() {
   // -- END: Local State --------------------------------------------------------
 
   return (
-    <View style={[styles.homeContainer, { backgroundColor: colors.secondary }]}>
-      <View style={styles.header}>
-        <Text>Home</Text>
-      </View>
-
+    <ScrollView
+      style={[styles.homeContainer, { backgroundColor: colors.secondary }]}
+      contentContainerStyle={styles.mainContentAlignment}
+      showsVerticalScrollIndicator={false}
+    >
       <View style={styles.mainContent}>
-        <Text variant="headlineMedium" style={styles.contentTitle}>
-          Tal vez te gustaría probar
+        <Text variant="headlineLarge" style={styles.contentTitle}>
+          Tal vez te gustes probar
         </Text>
-        <RestaurantSuggestions />
         <PlatesSuggestions />
+        <RestaurantSuggestions />
       </View>
-      <Button onPress={() => signOut()}>Sign Out</Button>
-    </View>
+      {/* <Button onPress={() => signOut()}>Sign Out</Button> */}
+    </ScrollView>
   );
 }

@@ -110,6 +110,7 @@ export default function SignUpForm() {
 
           <Button
             disabled={isLoading}
+            loading={isLoading}
             mode="contained"
             onPress={handleSubmit(onSubmit)}
             buttonColor={colors.primary}
@@ -121,11 +122,7 @@ export default function SignUpForm() {
             contentStyle={[styles.button, { backgroundColor: colors.primary }]}
             labelStyle={[styles.button_text, { color: colors.onPrimary }]}
           >
-            {isLoading ? (
-              <ActivityIndicator color={colors.onPrimary} />
-            ) : (
-              <>Registrarme</>
-            )}
+            Registrarme
           </Button>
         </View>
       </ScrollView>

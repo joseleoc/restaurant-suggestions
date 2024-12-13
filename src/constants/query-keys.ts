@@ -3,4 +3,5 @@ export const QueryKeys = {
     UpdateUser: "UpdateUser",
     SignOut: "SignOut",
     RecommendedRestaurants: "RecommendedRestaurants",
+    RecommendedPlates: "RecommendedPlates",
 }

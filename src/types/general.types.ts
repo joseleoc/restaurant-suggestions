@@ -71,6 +71,7 @@ export class Plate {
     name: string;
     restaurant: string;
     updated_at: Date;
+    price: number;
 
     constructor(
         params: Plate & { created_at: Timestamp; updated_at: Timestamp },
@@ -78,7 +79,7 @@ export class Plate {
         this.id = params.id;
         this.allergies = params.allergies;
         this.categories = params.categories;
-        this.created_at = new FirebaseDate(params.created_at).toDate();
+        this.created_at = params.created_at.toDate();
         this.description = params.description;
         this.images = params.images;
         this.ingredients = params.ingredients;
@@ -86,6 +87,14 @@ export class Plate {
         this.is_deleted = params.is_deleted || false;
         this.name = params.name;
         this.restaurant = params.restaurant;
-        this.updated_at = new FirebaseDate(params.updated_at).toDate();
+        this.updated_at = params.updated_at.toDate();
+        this.price = params.price || 0;
   }
+}
+
+export type Restaurant_Plates = {
+    id: string;
+    restaurant: string;
+    plate: string;
+    allergies: string[];
 }

@@ -10,8 +10,8 @@ import {
 
 import {
   Restaurant,
-  Plate,
   RestaurantFromFirestore,
+  Restaurant_Plates,
 } from "../types/general.types";
 import { db } from "@/firebase";
 import { CollectionNames } from "../constants/collections-names";
@@ -24,17 +24,16 @@ export function fetchRecommendedRestaurants(params: {
 }): Promise<Restaurant[]> {
   return new Promise((resolve, reject) => {
     const { allergies, page_size, page } = params;
-    const platesQuery = query(
-      collection(db, CollectionNames.Plates),
-      where("is_active", "==", true),
-      where("is_deleted", "==", false),
+    const ternaryQuery = query(
+      collection(db, CollectionNames.Restaurants_Plates),
       where("allergies", "not-in", allergies),
     );
-
-    getDocs(platesQuery)
-      .then((platesSnapshot) => {
-        const restaurantIds = platesSnapshot.docs.map(
-          (doc) => firebaseConverter<Plate>().fromFirestore(doc).restaurant,
+    getDocs(ternaryQuery)
+      .then((ternarySnapshot) => {
+        const restaurantIds = ternarySnapshot.docs.map(
+          (doc) =>
+            firebaseConverter<Restaurant_Plates>().fromFirestore(doc)
+              .restaurant,
         );
         const restaurantsQuery = query(
           collection(db, CollectionNames.Restaurants),
