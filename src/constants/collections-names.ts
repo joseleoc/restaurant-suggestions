@@ -1,5 +1,8 @@
 export const CollectionNames = {
     Allergies: "allergies",
     Users: "users",
-    User_Allergies: "user_allergies",
+    Restaurants: "restaurants",
+    Plates: "plates",
+    Categories: "categories",
+    Restaurants_Plates: "restaurants_plates",
 }

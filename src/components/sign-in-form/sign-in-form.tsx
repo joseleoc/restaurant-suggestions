@@ -2,7 +2,7 @@ import * as yup from "yup";
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import { styles } from "./sign-in-form.styles";
 import { useForm } from "react-hook-form";
-import { ActivityIndicator, Button, useTheme } from "react-native-paper";
+import { Button, useTheme } from "react-native-paper";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SignInSchema } from "./sign-in-form.schema";
 import { useState } from "react";
@@ -116,6 +116,7 @@ export default function SignInForm() {
 
           <Button
             disabled={isLoading}
+            loading={isLoading}
             mode="contained"
             onPress={handleSubmit(onSubmit)}
             style={[
@@ -126,11 +127,7 @@ export default function SignInForm() {
             contentStyle={[styles.button, { backgroundColor: colors.primary }]}
             labelStyle={[styles.button_text, { color: colors.onPrimary }]}
           >
-            {isLoading ? (
-              <ActivityIndicator color={colors.onPrimary} />
-            ) : (
-              <> Iniciar Sesión</>
-            )}
+            Iniciar Sesión
           </Button>
         </View>
       </ScrollView>
