@@ -7,10 +7,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Home() {
   // --- Hooks -----------------------------------------------------------------
-  const { user, setCompleteProfileModal, setAllergies, setPendingAllergies } =
-    useStore();
+  const { user, setCompleteProfileModal } = useStore();
   const pathName = usePathname();
   useAllAllergiesFetch();
+
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Local State ------------------------------------------------------------
@@ -27,7 +27,7 @@ export default function Home() {
   // --- Effects ----------------------------------------------------------------
   // -- END: Effects ------------------------------------------------------------
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <HomePage />
     </SafeAreaView>
   );
