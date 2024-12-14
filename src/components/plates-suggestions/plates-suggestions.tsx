@@ -1,22 +1,49 @@
 import Animated from "react-native-reanimated";
 import { styles } from "./plates-suggestions.styles";
 import PlateCard from "../plate-card/plate-card";
-import { useRecommendedPlatesFetch } from "@/src/hooks/plates";
 import { useStore } from "@/stores/stores";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Text, useTheme } from "react-native-paper";
 import { View } from "react-native";
+import { useQuery } from "@tanstack/react-query";
+import { QueryKeys } from "@/src/constants/query-keys";
+import { fetchRecommendedPlates } from "@/src/services/plates.service";
+import { Plate } from "@/src/types/general.types";
 
 export default function PlatesSuggestions() {
   // --- Hooks -----------------------------------------------------------------
-  const { user } = useStore();
+  const { user, allergies, plates, setPlates } = useStore();
+  const allergiesToInclude = useMemo(() => {
+    const userAllergies = user?.allergies || [];
+    const activeAllergies = allergies || [];
+
+    const toInclude = activeAllergies
+      .filter((al) => (userAllergies.some((id) => id === al.id) ? false : true))
+      .map((al) => al.id);
+    return toInclude;
+  }, [user, allergies]);
   const { colors } = useTheme();
-  const { data: plates, error } = useRecommendedPlatesFetch({
-    allergies: user?.allergies || [],
-    page_size: 10,
-    page: 0,
+  const { data, error, refetch, status } = useQuery({
+    queryKey: [
+      QueryKeys.RecommendedPlates,
+      {
+        allergiesToInclude,
+        page_size: 10,
+        page: 0,
+      },
+    ],
+    queryFn: fetchRecommendedPlates,
+    retry: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    retryOnMount: false,
+    enabled: true,
   });
   // --- END: Hooks ------------------------------------------------------------
+
+  // --- Local State -----------------------------------------------------------------
+
+  // --- END: Local State ------------------------------------------------------------
 
   // --- Effects ----------------------------------------------------------------
   useEffect(() => {
@@ -24,6 +51,18 @@ export default function PlatesSuggestions() {
       console.error(error);
     }
   }, [error]);
+  useEffect(() => {
+    if (user != null && user.profile_completed && user.allergies != null) {
+      refetch();
+    }
+  }, [refetch, user, allergiesToInclude]);
+
+  useEffect(() => {
+    if (data) {
+      setPlates(data);
+    }
+  }, [data, setPlates, status]);
+
   // -- END: Effects ------------------------------------------------------------
 
   return (

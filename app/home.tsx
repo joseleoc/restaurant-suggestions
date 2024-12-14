@@ -18,7 +18,11 @@ export default function Home() {
 
   // --- Data and Handlers ------------------------------------------------------
   useEffect(() => {
-    if (user != null && !user.profile_completed && pathName === "/home") {
+    if (
+      user != null &&
+      user.profile_completed === false &&
+      pathName === "/home"
+    ) {
       setCompleteProfileModal(true);
     }
   }, [user, setCompleteProfileModal, pathName]);

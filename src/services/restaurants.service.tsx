@@ -17,16 +17,33 @@ import { db } from "@/firebase";
 import { CollectionNames } from "../constants/collections-names";
 import { firebaseConverter } from "../utils/firestore-converter";
 
-export function fetchRecommendedRestaurants(params: {
-  allergies: string[];
-  page_size: number;
-  page: number;
+export function fetchRecommendedRestaurants({
+  queryKey,
+}: {
+  queryKey: [
+    string,
+    {
+      allergiesToInclude: string[];
+      page_size: number;
+      page: number;
+    },
+  ];
 }): Promise<Restaurant[]> {
   return new Promise((resolve, reject) => {
-    const { allergies, page_size, page } = params;
+    const { allergiesToInclude, page_size, page } = queryKey[1];
+    const constraints = [];
+    if (allergiesToInclude.length > 0) {
+      constraints.push(
+        where(
+          "allergies",
+          "array-contains-any",
+          allergiesToInclude.splice(0, 10),
+        ),
+      );
+    }
     const ternaryQuery = query(
       collection(db, CollectionNames.Restaurants_Plates),
-      where("allergies", "not-in", allergies),
+      ...constraints,
     );
     getDocs(ternaryQuery)
       .then((ternarySnapshot) => {
@@ -63,6 +80,7 @@ export function fetchRecommendedRestaurants(params: {
           error,
         );
         reject(error);
+        throw new Error(error);
       });
   });
 }
