@@ -10,7 +10,7 @@ export default function RestaurantSuggestions() {
   // --- Hooks -----------------------------------------------------------------
   const { user } = useStore();
   const { colors } = useTheme();
-  const { data: restaurants, refetch } = useRecommendedRestaurantsFetch({
+  const { data: restaurants } = useRecommendedRestaurantsFetch({
     allergies: user?.allergies || [],
     page_size: 10,
     page: 0,
@@ -24,12 +24,7 @@ export default function RestaurantSuggestions() {
   // -- END: Data and Handlers --------------------------------------------------
 
   // --- Effects ----------------------------------------------------------------
-  // useEffect(() => {
-  //   if (user != null && user.profile_completed && user.allergies != null) {
-  //     console.info("Refetching restaurants");
-  //     refetch();
-  //   }
-  // }, [refetch, user]);
+
   // -- END: Effects ------------------------------------------------------------
   return (
     <View style={styles.container}>

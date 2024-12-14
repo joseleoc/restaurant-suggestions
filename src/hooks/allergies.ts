@@ -3,11 +3,10 @@ import { QueryKeys } from "../constants/query-keys";
 import { useStore } from "@/stores/stores";
 import { Allergy } from "../types/general.types";
 import { fetchAllergies } from "../services/allergies.service";
-import { useEffect } from "react";
 
 export function useAllAllergiesFetch() {
     // --- Hooks -----------------------------------------------------------------
-    const { user, setPendingAllergies, setAllergies } = useStore();
+    const { setPendingAllergies, setAllergies } = useStore();
 
     const query = useQuery({
         queryKey: [QueryKeys.allergies],
@@ -24,17 +23,11 @@ export function useAllAllergiesFetch() {
       retry: 0,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
-      retryOnMount: false,
-      enabled: !!user,
+        retryOnMount: false,
   });
     // --- END: Hooks ------------------------------------------------------------
 
     // --- Effects ----------------------------------------------------------------
-    useEffect(() => {
-        if (user != null && user.profile_completed && user.allergies != null) {
-            query.refetch();
-        }
-    }, [query, user]);
     // -- END: Effects ------------------------------------------------------------
 
     return query;

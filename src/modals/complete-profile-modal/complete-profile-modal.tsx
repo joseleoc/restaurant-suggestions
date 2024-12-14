@@ -30,10 +30,10 @@ export default function CompleteProfile() {
 
   const {
     completeProfileModalIsOpen,
-    setCompleteProfileModal,
     pendingAllergies,
     allergies,
     user,
+    setCompleteProfileModal,
   } = useStore();
   const {
     handleSubmit,
@@ -63,7 +63,7 @@ export default function CompleteProfile() {
 
   // --- Data and Handlers ------------------------------------------------------
 
-  const onsubmit = useCallback(() => {
+  const onsubmit = async () => {
     if (isValid && isLoading === false && user) {
       setIsLoading(true);
       const userId = user.id;
@@ -74,9 +74,10 @@ export default function CompleteProfile() {
       updatedUser.phone_number = formValues.phone;
       updatedUser.allergies = formValues.allergies;
       updatedUser.profile_completed = true;
-      updateUser({ userId, data: updatedUser });
+      await updateUser({ userId, data: updatedUser });
+      setCompleteProfileModal(false);
     }
-  }, [getValues, isLoading, isValid, updateUser, user]);
+  };
 
   const selectAllergy = (allergy: Allergy) => {
     const selectedAllergies = getValues("allergies") || [];
@@ -109,13 +110,13 @@ export default function CompleteProfile() {
     else if (step === 2) return "Preferencias alimenticias";
   }, [step]);
 
-  const handleButtonAction = useCallback(() => {
+  const handleButtonAction = () => {
     if (step === 1) {
       nextStep();
     } else {
       handleSubmit(onsubmit)();
     }
-  }, [handleSubmit, nextStep, onsubmit, step]);
+  };
   // -- END: Data and Handlers --------------------------------------------------
 
   // --- Effects ----------------------------------------------------------------
@@ -124,7 +125,6 @@ export default function CompleteProfile() {
     if (updateUserStatus === "success") {
       toast.success("Datos actualizados");
       setIsLoading(false);
-      setCompleteProfileModal(false);
     }
     if (updateUserStatus === "error") {
       toast.error("Error al actualizar datos");
