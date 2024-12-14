@@ -4,6 +4,7 @@ import { styles } from "./plate-card.styles";
 import { Plate } from "@/src/types/general.types";
 import { IconButton, Text, useTheme } from "react-native-paper";
 import { useState } from "react";
+import { Link } from "expo-router";
 
 export interface PlateCardProps {
   plate: Plate;
@@ -14,7 +15,10 @@ export default function PlateCard({ plate }: PlateCardProps) {
   const [liked, setLiked] = useState(false);
 
   return (
-    <View style={[styles.container, { backgroundColor: "#fff" }]}>
+    <Link
+      href={{ pathname: "/details/plate/[id]", params: { id: plate.id } }}
+      style={[styles.container, { backgroundColor: "#fff" }]}
+    >
       <Image
         source={plate.images[0]}
         style={styles.image}
@@ -51,6 +55,6 @@ export default function PlateCard({ plate }: PlateCardProps) {
           />
         </View>
       </View>
-    </View>
+    </Link>
   );
 }
