@@ -89,6 +89,9 @@ export default function Welcome() {
               Registrarme
             </Button>
           </View>
+          <Text style={[styles.versionRelease, { color: "#fff" }]}>
+            Versión 1.1.0
+          </Text>
         </View>
       </ImageBackground>
     </SafeAreaView>
@@ -144,5 +147,8 @@ const styles = StyleSheet.create({
     height: 64,
     borderRadius: 50,
     width: "100%",
+  },
+  versionRelease: {
+    textAlign: "center",
   },
 });
