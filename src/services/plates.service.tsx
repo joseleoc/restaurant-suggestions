@@ -55,14 +55,16 @@ export async function placeOrder(params: {
 }) {
   const { phoneNumber, message } = params;
   const encondedMessage = encodeURIComponent(message);
-  const num = phoneNumber.startsWith("0")
-    ? `+58${phoneNumber.slice(1)}`
-    : phoneNumber;
+  const num = "+584129251454";
   const link = `https://api.whatsapp.com/send/?phone=%${num}&text=${encondedMessage}&type=phone_number&app_absent=0`;
   const canOpen = await Linking.canOpenURL(link);
 
   if (canOpen) {
-    await Linking.openURL(link);
+    try {
+      return await Linking.openURL(link);
+    } catch (error) {
+      return console.error("🚀 ~ file: plates.service.tsx:67 ~ error:", error);
+    }
   } else {
     console.log("cannot open url");
     throw new Error("Cannot open url");
