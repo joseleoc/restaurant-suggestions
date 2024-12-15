@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useStore } from "@/src/stores/stores";
 import { useMemo } from "react";
+import BackButton from "../../../src/components/back-button/back-button";
 
 export default function PlateDetailsScreen() {
   const { id } = useLocalSearchParams();
@@ -14,6 +15,7 @@ export default function PlateDetailsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <PlateDetails plate={plate} />
+      <BackButton />
     </SafeAreaView>
   );
 }

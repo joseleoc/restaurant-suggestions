@@ -57,6 +57,7 @@ export async function placeOrder(params: {
   const encondedMessage = encodeURIComponent(message);
   const link = `https://api.whatsapp.com/send/?phone=%${phoneNumber}&text=${encondedMessage}&type=phone_number&app_absent=0`;
   const canOpen = await Linking.canOpenURL(link);
+  console.log({ canOpen });
 
   if (canOpen) {
     await Linking.openURL(link);
