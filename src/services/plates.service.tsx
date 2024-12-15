@@ -55,13 +55,16 @@ export async function placeOrder(params: {
 }) {
   const { phoneNumber, message } = params;
   const encondedMessage = encodeURIComponent(message);
-  const link = `https://api.whatsapp.com/send/?phone=%${phoneNumber}&text=${encondedMessage}&type=phone_number&app_absent=0`;
+  const num = phoneNumber.startsWith("0")
+    ? `+58${phoneNumber.slice(1)}`
+    : phoneNumber;
+  const link = `https://api.whatsapp.com/send/?phone=%${num}&text=${encondedMessage}&type=phone_number&app_absent=0`;
   const canOpen = await Linking.canOpenURL(link);
-  console.log({ canOpen });
 
   if (canOpen) {
     await Linking.openURL(link);
   } else {
     console.log("cannot open url");
+    throw new Error("Cannot open url");
   }
 }

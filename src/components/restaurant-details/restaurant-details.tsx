@@ -1,11 +1,12 @@
 import { Plate, Restaurant } from "@/src/types/general.types";
-import { NativeScrollEvent, NativeSyntheticEvent, View } from "react-native";
-import { Icon, Text, useTheme } from "react-native-paper";
+import { View } from "react-native";
+import { ActivityIndicator, Icon, Text, useTheme } from "react-native-paper";
 import { styles } from "./restaurant-details.styles";
 import { Image } from "expo-image";
 import PlatesGrid from "../plates-grid/plates-grid";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { fetchRestaurantPlates } from "@/src/services/restaurants.service";
+import { useQuery } from "@tanstack/react-query";
 
 export interface RestaurantDetailsProps {
   restaurant: Restaurant | undefined;
@@ -23,22 +24,37 @@ export default function RestaurantDetails({
   // -- END: Local State --------------------------------------------------------
 
   // --- Data and Handlers ------------------------------------------------------
-  const getPlates = async () => {
+  const getPlates = async ({
+    queryKey,
+  }: {
+    queryKey: [
+      string,
+      { restaurantId?: string; page: number; page_size: number },
+    ];
+  }) => {
+    const [_, { restaurantId, page, page_size }] = queryKey;
+    if (restaurantId === undefined) return [];
     if (restaurant) {
       const plates = await fetchRestaurantPlates({
-        restaurantId: restaurant.id,
-        page: 0,
-        page_size: 10,
+        restaurantId,
+        page,
+        page_size,
       });
       setPlates(plates);
+      return plates;
     }
   };
 
+  const { data, isPending } = useQuery({
+    queryKey: [
+      "getRestaurantPlates",
+      { restaurantId: restaurant?.id, page: 0, page_size: 10 },
+    ],
+    queryFn: getPlates,
+    enabled: !!restaurant?.id,
+  });
   // -- END: Data and Handlers --------------------------------------------------
   // --- Effects ----------------------------------------------------------------
-  useEffect(() => {
-    getPlates();
-  }, []);
   // -- END: Effects ------------------------------------------------------------
   if (!restaurant) {
     return null;
@@ -76,7 +92,7 @@ export default function RestaurantDetails({
             {restaurant.address}
           </Text>
         </View>
-        <PlatesGrid plates={plates} />
+        {isPending ? <ActivityIndicator /> : <PlatesGrid plates={plates} />}
       </View>
     </View>
   );
