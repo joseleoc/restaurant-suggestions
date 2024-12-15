@@ -2,10 +2,12 @@ import { IconButton } from "react-native-paper";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function BackButton() {
   // --- Hooks -----------------------------------------------------------------
   const [canGoBack, setCanGoBack] = useState(false);
+  const insets = useSafeAreaInsets();
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Data and Handlers -----------------------------------------------------
@@ -30,7 +32,7 @@ export default function BackButton() {
     <IconButton
       icon="arrow-left"
       onPress={() => goBack()}
-      style={style.container}
+      style={[style.container, { top: insets.top + 5 }]}
     />
   );
 }
@@ -39,7 +41,6 @@ const style = StyleSheet.create({
   container: {
     position: "absolute",
     left: 0,
-    top: 10,
     zIndex: 100,
   },
 });

@@ -25,13 +25,14 @@ export const styles = StyleSheet.create({
         paddingBottom: 5,
         padding: 8,
         width: "100%",
-        flex: 1,
+        height: "60%",
     },
     actions: {
         flexDirection: "row",
         gap: 10,
         alignItems: "center",
         justifyContent: "space-between",
+
     },
     priceLabel: {
         fontWeight: "bold",

@@ -25,9 +25,7 @@ export default function PlateDetails(params: { plate: Plate | undefined }) {
       );
       placeOrder({
         phoneNumber: user.phone_number,
-        message: `Hola, me gustaría pedir
-         "${plate?.name}"${restaurant && `, del restaurante "${restaurant.name}"`},
-         a nombre de: ${user.first_name} ${user.last_name}`,
+        message: `Hola, me gustaría pedir: "${plate?.name}", ${restaurant && `del restaurante "${restaurant.name}", `}a nombre de: ${user.first_name} ${user.last_name}`,
       });
     }
   };
@@ -106,6 +104,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    gap: 10,
   },
   title: {
     fontWeight: "bold",

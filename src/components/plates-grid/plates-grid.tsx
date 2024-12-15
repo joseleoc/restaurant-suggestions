@@ -29,7 +29,6 @@ export default function PlatesGrid({
     return (
       <Link
         href={{ pathname: "/details/plate/[id]", params: { id: plate.id } }}
-        key={plate.id}
         style={styles.link}
       >
         <View style={styles.cardContainer}>
@@ -69,7 +68,7 @@ export default function PlatesGrid({
       renderItem={({ item }) => (
         <View style={styles.rowContainer}>
           {item.map((plate) => (
-            <Card plate={plate} />
+            <Card key={plate.id} plate={plate} />
           ))}
         </View>
       )}
