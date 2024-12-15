@@ -39,7 +39,7 @@ const style = StyleSheet.create({
   container: {
     position: "absolute",
     left: 0,
-    top: 5,
+    top: 10,
     zIndex: 100,
   },
 });

@@ -6,9 +6,11 @@ import {
   limit,
   startAt,
   orderBy,
+  Timestamp,
 } from "firebase/firestore";
 
 import {
+  Plate,
   Restaurant,
   RestaurantFromFirestore,
   Restaurant_Plates,
@@ -73,6 +75,59 @@ export function fetchRecommendedRestaurants({
         );
         resolve(restaurants);
         return restaurants;
+      })
+      .catch((error) => {
+        console.error(
+          "🚀 ~ file: restaurants.service.ts:24 ~ returnnewPromise ~ error:",
+          error,
+        );
+        reject(error);
+        throw new Error(error);
+      });
+  });
+}
+
+export function fetchRestaurantPlates(params: {
+  restaurantId: string;
+  page: number;
+  page_size: number;
+}): Promise<Plate[]> {
+  return new Promise((resolve, reject) => {
+    const { restaurantId, page, page_size } = params;
+    const q = query(
+      collection(db, CollectionNames.Restaurants_Plates),
+      where("restaurant", "==", restaurantId),
+      orderBy("plate"),
+      limit(page_size),
+      startAt(page * page_size),
+    );
+
+    getDocs(q)
+      .then((snapshot) => {
+        const ternary = snapshot.docs.map((doc) => {
+          return firebaseConverter<Restaurant_Plates>().fromFirestore(doc);
+        });
+
+        const platesQuery = query(
+          collection(db, CollectionNames.Plates),
+          where("is_active", "==", true),
+          where("is_deleted", "==", false),
+          where(
+            "id",
+            "in",
+            ternary.map((p) => p.plate),
+          ),
+        );
+
+        return getDocs(platesQuery);
+      })
+      .then((platesSnapshot) => {
+        const plates = platesSnapshot.docs.map((doc) => {
+          return firebaseConverter<
+            Plate & { created_at: Timestamp; updated_at: Timestamp }
+          >().fromFirestore(doc);
+        });
+        resolve(plates.map((p) => new Plate(p)));
       })
       .catch((error) => {
         console.error(
