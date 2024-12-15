@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
         borderRadius: 30,
         width: Dimensions.get("window").width / 3,
         maxWidth: 200,
+        minWidth: 100,
         overflow: "hidden",
     },
     image: {
@@ -32,6 +33,8 @@ export const styles = StyleSheet.create({
         gap: 10,
         alignItems: "center",
         justifyContent: "space-between",
+        maxWidth: Dimensions.get("window").width / 3 - 8,
+        minWidth: 90,
 
     },
     priceLabel: {

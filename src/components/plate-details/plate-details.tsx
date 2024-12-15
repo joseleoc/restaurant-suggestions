@@ -6,6 +6,7 @@ import { FAB, Text, useTheme } from "react-native-paper";
 import { FlatList } from "react-native-gesture-handler";
 import { placeOrder } from "@/src/services/plates.service";
 import { useStore } from "@/stores/stores";
+import { toast } from "@backpackapp-io/react-native-toast";
 
 export default function PlateDetails(params: { plate: Plate | undefined }) {
   // --- Hooks -----------------------------------------------------------------
@@ -18,16 +19,16 @@ export default function PlateDetails(params: { plate: Plate | undefined }) {
   const { plate } = params;
 
   const handlePlaceOrder = () => {
-    if (user?.phone_number) {
-      const restaurantId = plate?.restaurant;
-      const restaurant = recommendedRestaurants.find(
-        (r) => r.id === restaurantId,
-      );
-      placeOrder({
-        phoneNumber: user.phone_number,
-        message: `Hola, me gustaría pedir: "${plate?.name}", ${restaurant && `del restaurante "${restaurant.name}", `}a nombre de: ${user.first_name} ${user.last_name}`,
-      });
-    }
+    const restaurantId = plate?.restaurant;
+    const restaurant = recommendedRestaurants.find(
+      (r) => r.id === restaurantId,
+    );
+    placeOrder({
+      phoneNumber: "+584129251454",
+      message: `Hola, me gustaría pedir: "${plate?.name}", ${restaurant && `del restaurante "${restaurant.name}", `}a nombre de: ${user.first_name} ${user.last_name}`,
+    })
+      .then((res) => toast("Opening whatsapp"))
+      .catch((err) => toast.error(err.message));
   };
   // -- END: Data and Handlers --------------------------------------------------
 
