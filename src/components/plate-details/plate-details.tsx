@@ -2,21 +2,23 @@ import { Plate } from "@/src/types/general.types";
 import { Dimensions, StyleSheet } from "react-native";
 import { Image } from "expo-image";
 import { View } from "react-native";
-import { FAB, Text, useTheme } from "react-native-paper";
+import { ActivityIndicator, FAB, Text, useTheme } from "react-native-paper";
 import { FlatList } from "react-native-gesture-handler";
-import { placeOrder } from "@/src/services/plates.service";
+import { fetchPlateById, placeOrder } from "@/src/services/plates.service";
 import { useStore } from "@/stores/stores";
 import { toast } from "@backpackapp-io/react-native-toast";
+import { useEffect, useState } from "react";
 
-export default function PlateDetails(params: { plate: Plate | undefined }) {
+export default function PlateDetails(params: { plateId: string | undefined }) {
   // --- Hooks -----------------------------------------------------------------
   const { colors } = useTheme();
   const { user, recommendedRestaurants } = useStore();
   // --- END: Hooks ------------------------------------------------------------
   // --- Local State ------------------------------------------------------------
+  const [loading, setLoading] = useState(false);
+  const [plate, setPlate] = useState<Plate | undefined>();
   // -- END: Local State --------------------------------------------------------
   // --- Data and Handlers ------------------------------------------------------
-  const { plate } = params;
 
   const handlePlaceOrder = () => {
     const restaurantId = plate?.restaurant;
@@ -30,7 +32,43 @@ export default function PlateDetails(params: { plate: Plate | undefined }) {
       .then((res) => toast("Opening whatsapp"))
       .catch((err) => toast.error(err.message));
   };
+
+  const fetchPlate = async () => {
+    const id = params.plateId;
+    if (id === undefined) {
+      toast.error("No se encontró el plato");
+      return;
+    }
+    setLoading(true);
+    fetchPlateById(id)
+      .then((resPlate) => {
+        setPlate(resPlate);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(
+          "🚀 ~ file: plate-details.tsx:45 ~ fetchPlate ~ err:",
+          err,
+        );
+        toast.error(err.message);
+        setLoading(false);
+      })
+      .finally(() => setLoading(false));
+  };
+
   // -- END: Data and Handlers --------------------------------------------------
+
+  // --- Effects ----------------------------------------------------------------
+  useEffect(() => {
+    if (plate === undefined) {
+      fetchPlate();
+    }
+  }, []);
+  // -- END: Effects ------------------------------------------------------------
+
+  if (plate === undefined && loading === true) {
+    return <ActivityIndicator size="large" color={colors.primary} />;
+  }
 
   if (plate === undefined) {
     return <Text>Plato no encontrado</Text>;

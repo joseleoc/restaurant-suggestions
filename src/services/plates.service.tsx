@@ -61,17 +61,37 @@ export async function placeOrder(params: {
   const { phoneNumber, message } = params;
   const encodedMessage = encodeURIComponent(message);
   const num = "+584129251454";
-  const link = `whatsapp://send?phone=${num}&text=${encodedMessage}`;
-  const canOpen = await Linking.canOpenURL(link);
+  const link = `https://wa.me/${num}?text=${encodedMessage}`;
 
-  if (canOpen) {
-    try {
-      return await Linking.openURL(link);
-    } catch (error) {
-      console.error("🚀 ~ file: plates.service.tsx:67 ~ error:", error);
-      return Promise.reject(error);
-    }
-  } else {
-    throw new Error("Can't open url");
+  try {
+    return await Linking.openURL(link);
+  } catch (error) {
+    console.error("🚀 ~ file: plates.service.tsx:67 ~ error:", error);
+    return Promise.reject(error);
   }
+}
+
+export function fetchPlateById(id: string): Promise<Plate> {
+  return new Promise((resolve, reject) => {
+    console.log("fetch plate");
+    const q = query(
+      collection(db, CollectionNames.Plates),
+      where("id", "==", id),
+    );
+
+    getDocs(q)
+      .then((snapshot) => {
+        const plate = firebaseConverter<Plate>().fromFirestore(
+          snapshot.docs[0],
+        );
+        resolve(plate);
+      })
+      .catch((error) => {
+        console.error(
+          "🚀 ~ file: plates.service.ts:24 ~ returnnewPromise ~ error:",
+          error,
+        );
+        reject(error);
+      });
+  });
 }
