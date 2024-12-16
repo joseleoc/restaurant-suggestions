@@ -45,7 +45,10 @@ export default function CompleteProfile() {
   } = useForm({
     resolver: yupResolver(CompleteProfileSchema),
     defaultValues: {
-      allergies: [],
+      allergies: user?.allergies || [],
+      name: user?.first_name || "",
+      lastName: user?.last_name || "",
+      phone: user?.phone_number || "",
     },
   });
   const {
@@ -134,6 +137,19 @@ export default function CompleteProfile() {
     }
   }, [updateUserResponse, updateUserStatus]);
 
+  useEffect(() => {
+    if (user) {
+      setValue("name", user?.first_name || "");
+      setValue("lastName", user?.last_name || "");
+      setValue("phone", user?.phone_number || "");
+      user?.allergies?.forEach((id) => {
+        const toInclude = allergies.find((al) => al.id === id);
+        if (toInclude) {
+          selectAllergy(toInclude);
+        }
+      });
+    }
+  }, []);
   // -- END: Effects ------------------------------------------------------------
 
   return (

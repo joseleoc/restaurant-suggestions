@@ -1,4 +1,12 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  startAt,
+  where,
+} from "firebase/firestore";
 import { Plate } from "../types/general.types";
 import { db } from "@/firebase";
 import { CollectionNames } from "../constants/collections-names";
@@ -15,17 +23,14 @@ export function fetchRecommendedPlates({
 }): Promise<Plate[]> {
   return new Promise((resolve, reject) => {
     const [_, params] = queryKey;
+
     const constraints = [
       where("is_active", "==", true),
       where("is_deleted", "==", false),
     ];
     if (params.allergiesToInclude.length > 0) {
       constraints.push(
-        where(
-          "allergies",
-          "array-contains-any",
-          params.allergiesToInclude.splice(0, 10),
-        ),
+        where("allergies", "array-contains-any", params.allergiesToInclude),
       );
     }
     const q = query(collection(db, CollectionNames.Plates), ...constraints);
@@ -54,9 +59,9 @@ export async function placeOrder(params: {
   message: string;
 }) {
   const { phoneNumber, message } = params;
-  const encondedMessage = encodeURIComponent(message);
+  const encodedMessage = encodeURIComponent(message);
   const num = "+584129251454";
-  const link = `whatsapp://send?phone=${num}&text=${encondedMessage}`;
+  const link = `whatsapp://send?phone=${num}&text=${encodedMessage}`;
   const canOpen = await Linking.canOpenURL(link);
 
   if (canOpen) {
@@ -67,7 +72,6 @@ export async function placeOrder(params: {
       return Promise.reject(error);
     }
   } else {
-    console.log("cannot open url");
-    throw new Error("Cannot open url");
+    throw new Error("Can't open url");
   }
 }

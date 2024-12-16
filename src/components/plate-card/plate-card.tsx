@@ -33,10 +33,16 @@ export default function PlateCard({ plate }: PlateCardProps) {
             variant="titleMedium"
             numberOfLines={2}
             ellipsizeMode="tail"
+            adjustsFontSizeToFit
           >
             {plate.name}
           </Text>
-          <Text variant="bodyMedium" numberOfLines={2} ellipsizeMode="tail">
+          <Text
+            variant="bodyMedium"
+            numberOfLines={2}
+            adjustsFontSizeToFit
+            ellipsizeMode="tail"
+          >
             {plate.description}
           </Text>
         </View>
@@ -44,6 +50,8 @@ export default function PlateCard({ plate }: PlateCardProps) {
           <Text
             style={[styles.priceLabel, { color: colors.primary }]}
             variant="headlineSmall"
+            adjustsFontSizeToFit
+            numberOfLines={1}
           >
             ${plate.price ? Number(plate.price).toFixed(2) : 0}
           </Text>

@@ -23,9 +23,10 @@ export default function Home() {
       user.profile_completed === false &&
       pathName === "/home"
     ) {
-      setCompleteProfileModal(true);
+      // setCompleteProfileModal(true);
     }
   }, [user, setCompleteProfileModal, pathName]);
+
   // -- END: Data and Handlers --------------------------------------------------
 
   // --- Effects ----------------------------------------------------------------
