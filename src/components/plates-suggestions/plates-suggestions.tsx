@@ -28,7 +28,6 @@ export default function PlatesSuggestions() {
     const toIncludeNames = toInclude.map(
       (id) => allergies.find((al) => al.id === id)?.name,
     );
-    console.log({ toIncludeNames });
 
     return toInclude;
   }, [user, allergies]);
@@ -36,7 +35,6 @@ export default function PlatesSuggestions() {
   // --- END: Hooks ------------------------------------------------------------
   // --- Data and Handlers ------------------------------------------------------
   const fetchPlates = async () => {
-    console.log({ allergiesToIncludeL: allergiesToInclude.length });
     setLoading(true);
     fetchRecommendedPlates({
       queryKey: [
@@ -59,10 +57,7 @@ export default function PlatesSuggestions() {
           return !notToInclude;
         });
 
-        console.log({ platesToInclude: platesToInclude.map((p) => p.name) });
-
         setPlates(platesToInclude);
-        console.log(plates.map((p) => p.name));
       })
       .catch(() => {
         toast.error("Hubo un error al cargar los platos");
@@ -88,18 +83,9 @@ export default function PlatesSuggestions() {
       user.allergies != null &&
       !firstRender
     ) {
-      console.log("calling plates from user effect");
       fetchPlates();
     }
   }, [user, allergiesToInclude]);
-
-  // useEffect(() => {
-  //   if (data) {
-  //     resetPlates();
-  //     setPlates(data);
-  //     console.log({ length: data.length, platesName: data.map((p) => p.name) });
-  //   }
-  // }, [data, resetPlates, setPlates]);
 
   // -- END: Effects ------------------------------------------------------------
 

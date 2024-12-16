@@ -23,10 +23,7 @@ export function fetchRecommendedPlates({
 }): Promise<Plate[]> {
   return new Promise((resolve, reject) => {
     const [_, params] = queryKey;
-    console.log(
-      "Fetching recommended plates",
-      params.allergiesToInclude.length,
-    );
+
     const constraints = [
       where("is_active", "==", true),
       where("is_deleted", "==", false),
@@ -75,7 +72,6 @@ export async function placeOrder(params: {
       return Promise.reject(error);
     }
   } else {
-    console.log("Can't open url");
     throw new Error("Can't open url");
   }
 }

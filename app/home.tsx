@@ -27,9 +27,6 @@ export default function Home() {
     }
   }, [user, setCompleteProfileModal, pathName]);
 
-  useEffect(() => {
-    setCompleteProfileModal(true);
-  }, []);
   // -- END: Data and Handlers --------------------------------------------------
 
   // --- Effects ----------------------------------------------------------------
