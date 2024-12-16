@@ -5,14 +5,18 @@ import { useStore } from "@/stores/stores";
 import { useEffect, useMemo, useState } from "react";
 import { Text, useTheme } from "react-native-paper";
 import { View } from "react-native";
-import { useQuery } from "@tanstack/react-query";
 import { QueryKeys } from "@/src/constants/query-keys";
 import { fetchRecommendedPlates } from "@/src/services/plates.service";
-import { Plate } from "@/src/types/general.types";
+import { toast } from "@backpackapp-io/react-native-toast";
 
 export default function PlatesSuggestions() {
+  // --- Local State -----------------------------------------------------------------
+  const [firstRender, setFirstRender] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  // --- END: Local State ------------------------------------------------------------
   // --- Hooks -----------------------------------------------------------------
-  const { user, allergies, plates, setPlates } = useStore();
+  const { user, allergies, plates, setPlates, resetPlates } = useStore();
   const allergiesToInclude = useMemo(() => {
     const userAllergies = user?.allergies || [];
     const activeAllergies = allergies || [];
@@ -20,48 +24,82 @@ export default function PlatesSuggestions() {
     const toInclude = activeAllergies
       .filter((al) => (userAllergies.some((id) => id === al.id) ? false : true))
       .map((al) => al.id);
+
+    const toIncludeNames = toInclude.map(
+      (id) => allergies.find((al) => al.id === id)?.name,
+    );
+    console.log({ toIncludeNames });
+
     return toInclude;
   }, [user, allergies]);
   const { colors } = useTheme();
-  const { data, error, refetch, status } = useQuery({
-    queryKey: [
-      QueryKeys.RecommendedPlates,
-      {
-        allergiesToInclude,
-        page_size: 10,
-        page: 0,
-      },
-    ],
-    queryFn: fetchRecommendedPlates,
-    retry: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    retryOnMount: false,
-    enabled: true,
-  });
   // --- END: Hooks ------------------------------------------------------------
+  // --- Data and Handlers ------------------------------------------------------
+  const fetchPlates = async () => {
+    console.log({ allergiesToIncludeL: allergiesToInclude.length });
+    setLoading(true);
+    fetchRecommendedPlates({
+      queryKey: [
+        QueryKeys.RecommendedPlates,
+        {
+          allergiesToInclude,
+          page_size: 10,
+          page: 0,
+        },
+      ],
+    })
+      .then((resPlates) => {
+        resetPlates();
 
-  // --- Local State -----------------------------------------------------------------
+        const platesToInclude = resPlates.filter((plate) => {
+          const userAllergies = user?.allergies || [];
+          const notToInclude = userAllergies.some((id) =>
+            plate.allergies.includes(id),
+          );
+          return !notToInclude;
+        });
 
-  // --- END: Local State ------------------------------------------------------------
+        console.log({ platesToInclude: platesToInclude.map((p) => p.name) });
+
+        setPlates(platesToInclude);
+        console.log(plates.map((p) => p.name));
+      })
+      .catch(() => {
+        toast.error("Hubo un error al cargar los platos");
+      })
+      .finally(() => setLoading(false));
+  };
+  // --- END: Data and Handlers --------------------------------------------------
 
   // --- Effects ----------------------------------------------------------------
   useEffect(() => {
-    if (error) {
-      console.error(error);
+    if (firstRender) {
+      setFirstRender(false);
     }
-  }, [error]);
-  useEffect(() => {
-    if (user != null && user.profile_completed && user.allergies != null) {
-      refetch();
-    }
-  }, [refetch, user, allergiesToInclude]);
 
-  useEffect(() => {
-    if (data) {
-      setPlates(data);
+    if (firstRender) {
+      fetchPlates();
     }
-  }, [data, setPlates, status]);
+  }, [setFirstRender, fetchPlates]);
+  useEffect(() => {
+    if (
+      user != null &&
+      user.profile_completed &&
+      user.allergies != null &&
+      !firstRender
+    ) {
+      console.log("calling plates from user effect");
+      fetchPlates();
+    }
+  }, [user, allergiesToInclude]);
+
+  // useEffect(() => {
+  //   if (data) {
+  //     resetPlates();
+  //     setPlates(data);
+  //     console.log({ length: data.length, platesName: data.map((p) => p.name) });
+  //   }
+  // }, [data, resetPlates, setPlates]);
 
   // -- END: Effects ------------------------------------------------------------
 
@@ -82,6 +120,10 @@ export default function PlatesSuggestions() {
           contentContainerStyle={styles.scrollViewContent}
           showsHorizontalScrollIndicator={false}
         >
+          {plates.length === 0 && loading === false && (
+            <Text>No hay platos disponibles</Text>
+          )}
+
           {plates?.map((plate) => {
             return <PlateCard plate={plate} key={plate.id} />;
           })}

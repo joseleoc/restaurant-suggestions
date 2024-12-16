@@ -32,6 +32,7 @@ export default function BackButton() {
     <IconButton
       icon="arrow-left"
       onPress={() => goBack()}
+      iconColor="#000"
       style={[style.container, { top: insets.top + 5 }]}
     />
   );
@@ -42,5 +43,6 @@ const style = StyleSheet.create({
     position: "absolute",
     left: 0,
     zIndex: 100,
+    backgroundColor: "#fff",
   },
 });
